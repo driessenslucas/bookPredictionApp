@@ -14,18 +14,25 @@
 				overflow: hidden;
 				width: 566px;
 				height: 1086px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				margin: 0 auto;
 			}
 			.main-content {
 				padding-top: 20px;
 				padding-bottom: 48px;
+				width: 566px;
+				height: 1086px;
 			}
 			.container {
 				background-color: white;
 				padding: 20px;
 				border-radius: 5px;
 				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Card-style container */
-				height: 95vh;
-				width: 90vw;
+				height: 95%;
+				width: 90%;
 				display: flex;
 				align-items: center;
 				flex-direction: column;
@@ -44,8 +51,7 @@
 				margin: 20px auto; /* Centrally aligned spinner */
 			}
 			#uploadForm {
-				position: absolute;
-				bottom: 5%;
+				order: 2;
 			}
 			#fileInput {
 				display: none; /* Hide the file input */
@@ -132,10 +138,6 @@
 
 			.sidebar-menu li a:hover {
 				background-color: #495057;
-			}
-
-			.main-content {
-				margin-left: 250px; /* same as sidebar width */
 			}
 
 			@media screen and (max-width: 768px) {

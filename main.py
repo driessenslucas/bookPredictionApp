@@ -4,12 +4,12 @@ import openai
 import base64
 from datetime import datetime
 import json
-import collections
 from pymongo import MongoClient
+from bson.json_util import dumps
 
 # Assuming MongoDB service is named 'mongo' in your docker-compose and the database name is 'your_database_name'
-mongo_user = os.environ.get('MONGO_INITDB_ROOT_USERNAME', 'admin')
-mongo_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'admin123')
+mongo_user = os.environ.get('MONGO_INITDB_ROOT_USERNAME', 'root')
+mongo_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'd3v3l0p3r')
 client = MongoClient(f'mongodb://mongo:27017/',
                      username=mongo_user,
                      password=mongo_pass)
@@ -90,6 +90,19 @@ app = Flask(__name__)
 #allow file uploads
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif'])
+
+@app.route('/get-user-data/<user_id>', methods=['GET'])
+def get_user_data(user_id):
+    # Convert user_id to the correct type if necessary (e.g., int or string)
+    user_id_query = int(user_id) if user_id.isdigit() else user_id
+
+    # Query the collection for documents where `user_id` matches the provided value
+    user_requests = collection.find({'user_id': user_id_query})
+
+    # Convert the query result to a list and then serialize to JSON
+    user_requests_json = dumps(list(user_requests))
+    
+    return user_requests_json
 
 
 @app.route('/')

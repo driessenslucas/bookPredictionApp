@@ -9,6 +9,8 @@ services:
       - ./templates:/app/templates
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
       - FLASK_APP=main.py # Assuming your Flask file is named app.py
       - PYTHONUNBUFFERED=1
     depends_on:

@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . /app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir Flask openai==0.28.0 pymongo
+RUN pip install --no-cache-dir Flask openai==0.28.0 pymongo==3.11.4
 
 # Make port 5000 available to the world outside this container
 EXPOSE 5000

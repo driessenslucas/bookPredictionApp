@@ -1,11 +1,23 @@
-from flask import Flask, request, jsonify, templating
+from flask import Flask, request, jsonify, templating, session
 import os
 import openai
 import base64
+from datetime import datetime
 import json
+import collections
+from pymongo import MongoClient
+
+# Assuming MongoDB service is named 'mongo' in your docker-compose and the database name is 'your_database_name'
+mongo_user = os.environ.get('MONGO_INITDB_ROOT_USERNAME', 'admin')
+mongo_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'admin123')
+client = MongoClient(f'mongodb://mongo:27017/',
+                     username=mongo_user,
+                     password=mongo_pass)
+db = client['book_app']
+collection = db['user_requests']
 
 
-def process(image_path):
+def process(image_path, user_id=1):
   
   books = [
     "The Secret History",
@@ -58,6 +70,20 @@ def process(image_path):
   response = openai.ChatCompletion.create(**payload)
   print(response.choices[0].message['content'])
   
+  #mogno
+  base64_image = f"data:image/jpeg;base64,{base64_image}"
+  # Assume the rest of your process function is here and generates a `response`
+
+  # Now, save to MongoDB
+  request_document = {
+      "user_id": user_id,
+      "timestamp": datetime.utcnow().isoformat(),
+      "image_base64": base64_image,
+      "openai_response": response.choices[0].message['content']
+  }
+
+  collection.insert_one(request_document)
+  
   return response.choices[0].message['content']
 
 app = Flask(__name__)
@@ -78,6 +104,8 @@ def upload_image():
     return jsonify({'error': 'No file part'})
   file = request.files['file']
   # pass the file to the process function
+  # user_id = session.get('user_id', 'default_user_id')
+  # response = process(file, user_id)
   response = process(file)
   response = json.loads(response)
   return jsonify({'response': response})

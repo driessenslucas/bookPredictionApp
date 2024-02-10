@@ -246,12 +246,14 @@
 							.css('background-image', 'url(' + e.target.result + ')')
 							.show();
 						$('#uploadText').hide();
+						$('#ResponseArea').hide();
 					};
 					reader.readAsDataURL(e.target.files[0]);
 				});
 
 				$('#btnUpload').click(function () {
 					$('#responseArea').hide();
+
 					$('#loadingSpinner').show();
 					var formData = new FormData();
 					formData.append('file', $('#fileInput')[0].files[0]);

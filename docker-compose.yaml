@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - 8500:5000
+      - '8500:5000'
     volumes:
       - ./:/app
       - ./templates:/app/templates
@@ -11,8 +11,54 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - FLASK_APP=main.py # Assuming your Flask file is named app.py
       - PYTHONUNBUFFERED=1
+    depends_on:
+      - mongo
+
     networks:
       - app-network
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017' # Exposing MongoDB port to the host for direct access (optional)
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    networks:
+      - app-network
+    healthcheck:
+      test: ['CMD', 'mongo', '--eval', "db.runCommand('ping').ok"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+  mongo-express:
+    image: mongo-express:latest
+    restart: always
+    ports:
+      - '8081:8081' # Exposing Mongo Express to the host for web access
+    links:
+      - mongo
+    env_file:
+      - .env
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin123
+      - ME_CONFIG_MONGODB_PORT=27017
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+volumes:
+  mongo-data: {}
 
 networks:
   app-network:

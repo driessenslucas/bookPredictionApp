@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, templating, session
+from flask import Flask, request, jsonify, templating, session, url_for
 import os
 import openai
 import base64
@@ -9,7 +9,7 @@ from bson.json_util import dumps
 
 # Assuming MongoDB service is named 'mongo' in your docker-compose and the database name is 'your_database_name'
 mongo_user = os.environ.get('MONGO_INITDB_ROOT_USERNAME', 'root')
-mongo_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'd3v3l0p3r')
+mongo_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'root123')
 client = MongoClient(f'mongodb://mongo:27017/',
                      username=mongo_user,
                      password=mongo_pass)
@@ -17,7 +17,7 @@ db = client['book_app']
 collection = db['user_requests']
 
 
-def process(image_path, user_id=1):
+def process(image_path, user_id='1'):
   
   books = [
     "The Secret History",
@@ -91,6 +91,45 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif'])
 
+app.secret_key = os.environ.get('SECRET_KEY', 'dev')
+
+
+@app.route('/')
+def index():
+  #return template
+  return templating.render_template('index.html')
+
+@app.route('/user-profile')
+def user_profile():
+  # Do some processing here if needed
+  
+  return templating.render_template('profile.html')  # Assuming 'profile.html' is under the 'templates' directory
+  
+
+@app.route('/redirect-to-home')
+def redirect_to_home():
+  # This will redirect to the view function named 'home'
+  return templating.render_template('index.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+  # Get the user_id from the request
+  user_id = request.form.get('user_id')
+  # Set the user_id in the session
+  session['user_id'] = user_id
+  # Redirect to the home page
+  return templating.render_template('index.html')
+
+@app.route('/logout')
+def logout():
+  # Clear session data
+  session.clear()
+  # Redirect to login or home page
+  return templating.render_template('index.html')
+
+  
+
+
 @app.route('/get-user-data/<user_id>', methods=['GET'])
 def get_user_data(user_id):
     # Convert user_id to the correct type if necessary (e.g., int or string)
@@ -105,11 +144,6 @@ def get_user_data(user_id):
     return user_requests_json
 
 
-@app.route('/')
-def index():
-  #return template
-  return templating.render_template('index.html')
-
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
   # check if the post request has the file part
@@ -117,9 +151,9 @@ def upload_image():
     return jsonify({'error': 'No file part'})
   file = request.files['file']
   # pass the file to the process function
-  # user_id = session.get('user_id', 'default_user_id')
-  # response = process(file, user_id)
-  response = process(file)
+  user_id = session.get('user_id', '1')
+  response = process(file, user_id)
+  # response = process(file)
   response = json.loads(response)
   return jsonify({'response': response})
 

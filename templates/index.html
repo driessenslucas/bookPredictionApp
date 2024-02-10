@@ -167,9 +167,11 @@
 				<!-- Add navigation links or content here -->
 				<ul class="sidebar-menu">
 					<li><a href="#">Home</a></li>
-					<li><a href="#">Profile and reviews</a></li>
+					<li>
+						<a href="{{ url_for('user_profile') }}">Profile and reviews</a>
+					</li>
 					<li><a href="#">Settings</a></li>
-					<li><a href="#">Logout</a></li>
+					<li><a href="{{ url_for('logout') }}">Logout</a></li>
 				</ul>
 			</div>
 		</div>

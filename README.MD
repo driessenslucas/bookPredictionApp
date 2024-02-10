@@ -16,9 +16,9 @@ Date: 2024-10-02
 
 ### Upcoming Features
 
-- Profiles for users to store their ratings and preferences.
-- A history of previous ratings and recommendations.
-- A custom Recommendation System based on user ratings and preferences.
+[] Profiles for users to store their ratings and preferences.
+[] A history of previous ratings and recommendations.
+[] A custom Recommendation System based on user ratings and preferences.
 
 ## Prerequisites
 

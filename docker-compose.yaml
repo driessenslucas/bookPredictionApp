@@ -1,0 +1,18 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - 8500:5000
+    volumes:
+      - ./:/app
+      - ./templates:/app/templates
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - FLASK_APP=main.py # Assuming your Flask file is named app.py
+      - PYTHONUNBUFFERED=1
+    networks:
+      - app-network
+
+networks:
+  app-network:

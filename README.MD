@@ -14,6 +14,12 @@ Date: 2024-10-02
 - Processing images to extract book titles using OpenAI's GPT-4 Vision model.
 - Predictive rating based on historical data with reasoning.
 
+### Upcoming Features
+
+- Profiles for users to store their ratings and preferences.
+- A history of previous ratings and recommendations.
+- A custom Recommendation System based on user ratings and preferences.
+
 ## Prerequisites
 
 - Docker and Docker Compose installed on your system.

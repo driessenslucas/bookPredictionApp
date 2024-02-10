@@ -17,6 +17,7 @@
 			}
 			.main-content {
 				padding-top: 20px;
+				padding-bottom: 48px;
 			}
 			.container {
 				background-color: white;
@@ -229,8 +230,17 @@
 					//if sidebar is active disable the main content
 					if ($('#sidebar').hasClass('active')) {
 						$('.main-content').css('pointer-events', 'none');
+						//make the main content look greyed out
+						$('.main-content').css('background-color', 'rgba(0, 0, 0, 0.5)');
+						$('.main-content').css('opacity', '0.5');
+						$('.container').css('background-color', 'rgba(0, 0, 0, 0.5)');
+						$('.container').css('opacity', '0.5');
 					} else {
 						$('.main-content').css('pointer-events', 'auto');
+						$('.main-content').css('background-color', 'rgba(0, 0, 0, 0)');
+						$('.main-content').css('opacity', '1');
+						$('.container').css('background-color', 'rgba(0, 0, 0, 0)');
+						$('.container').css('opacity', '1');
 					}
 				});
 			});

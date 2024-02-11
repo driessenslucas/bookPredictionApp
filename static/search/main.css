@@ -7,6 +7,9 @@ body {
 	width: calc(100% - 120px);
 	padding: 10px;
 	margin-right: 5px;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	border: 0px;
 }
 #searchButton {
 	padding: 10px;
@@ -115,6 +118,19 @@ body {
 
 .c-searchbar {
 	display: flex;
-	justify-content: center;
 	align-items: center;
+	position: fixed; /* Fixed positioning */
+	bottom: 70px; /* Height of the bottom app bar */
+	width: 100%; /* Full width */
+	margin: 0 auto; /* Center the search bar */
+	padding: 10px 0; /* Add some padding */
+	z-index: 999; /* Ensure it's above other content but below the overlaying bottom app bar */
+	max-width: 500px;
+	bottom: 110px;
+}
+
+.c-searchbox {
+	width: 90vw; /* You may want to adjust this to less than 100% to give some padding */
+	max-width: 500px; /* Adjust as needed */
+	margin: 0 auto; /* This will center the search box */
 }

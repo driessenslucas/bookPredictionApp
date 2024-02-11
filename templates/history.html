@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Search History</title>
+		<!-- Add Bootstrap CSS for styling -->
+		<link
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+			rel="stylesheet" />
+		<!-- Additional CSS if needed -->
+	</head>
+	<body>
+		<div class="container">
+			<h1>Search History</h1>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Book Title</th>
+						<th>Predicted Rating</th>
+						<th>Reason</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for record in search_history %}
+					<tr>
+						<td>{{ record.timestamp }}</td>
+						<td>{{ record.openai_response.book_title }}</td>
+						<td>{{ record.openai_response.predicted_rating }}</td>
+						<td>{{ record.openai_response.reason }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<!-- Add Bootstrap JS and jQuery if you need them -->
+	</body>
+</html>

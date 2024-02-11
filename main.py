@@ -8,7 +8,11 @@ from bson import ObjectId
 from pymongo import MongoClient
 from bson.json_util import dumps
 from pydantic import BaseModel
-# Assuming MongoDB service is named 'mongo' in your docker-compose and the database name is 'your_database_name'
+from langdetect import detect
+import requests
+
+
+
 mongo_user = os.environ.get('MONGO_INITDB_ROOT_USERNAME', 'root')
 mongo_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'root123')
 client = MongoClient(f'mongodb://mongo:27017/',
@@ -107,14 +111,13 @@ def before_request():
     # do something here
     AppHasRunBefore = True
     print('App has run before')
-    # session.clear()
+    session.clear()
     
 
 # Pydantic model for the rating data
 class RatingData(BaseModel):
     book_title: str
     rating: int
-
 
 @app.route('/')
 def index():
@@ -173,9 +176,10 @@ def search_books():
       return redirect(url_for('index'))
   return render_template('search.html')
 
-@app.route('/get-user-data/<user_id>', methods=['GET'])
-def get_user_data(user_id):
+@app.route('/get-user-data', methods=['GET'])
+def get_user_data():
   # Convert user_id to the correct type if necessary (e.g., int or string)
+  user_id = session.get('user_id')
   user_id_query = int(user_id) if user_id.isdigit() else user_id
 
   # Query the collection for documents where `user_id` matches the provided value
@@ -185,6 +189,12 @@ def get_user_data(user_id):
   user_requests_json = dumps(list(user_requests))
   
   return user_requests_json
+
+@app.route('/history')
+def history():
+  if 'user_id' not in session:
+      return redirect(url_for('index'))
+  return render_template('history.html')
 
 @app.route('/get-user-ratings', methods=['GET'])
 def get_user_ratings():
@@ -211,12 +221,17 @@ def upload_image():
   response = json.loads(response)
   return jsonify({'response': response})
 
-import requests
+
 
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query', '')
-    url = f'https://www.googleapis.com/books/v1/volumes?q={query}'
+    # Assume you have a function to detect language from the query
+    # For example, you might use 'en' for English, 'fr' for French, etc.
+    language = detect_language(query)
+    
+    # Append the language restrict query parameter
+    url = f'https://www.googleapis.com/books/v1/volumes?q={query}&langRestrict={language}'
 
     try:
         response = requests.get(url)
@@ -232,6 +247,13 @@ def search():
         return jsonify({'error': 'API request unsuccessful', 'details': str(err)}), 500
     except Exception as e:
         return jsonify({'error': 'An error occurred', 'details': str(e)}), 500
+
+def detect_language(query):
+    try:
+        return detect(query)
+    except Exception as e:
+        return 'en'  # Default to 'en' if language detection fails
+
 
 def parse_google_books_response(data):
     # This function should parse the JSON response from Google Books

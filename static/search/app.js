@@ -1,8 +1,23 @@
 document.getElementById('searchButton').addEventListener('click', function () {
+	console.log('Searching for books...');
 	var query = document.getElementById('searchQuery').value;
+	// Show the loading Swal
+	Swal.fire({
+		title: 'Searching...',
+		text: 'Please wait while we find the books.',
+		icon: 'info',
+		showConfirmButton: false,
+		allowOutsideClick: false,
+		allowEscapeKey: false,
+		didOpen: () => {
+			Swal.showLoading();
+		},
+	});
+
 	fetch('/search?query=' + encodeURIComponent(query))
 		.then((response) => response.json())
 		.then((books) => {
+			Swal.close();
 			var resultsHTML = '';
 			books.forEach((book) => {
 				resultsHTML += `
@@ -33,12 +48,22 @@ document.getElementById('searchButton').addEventListener('click', function () {
             <div class="clear"></div>
         </div>
     `;
+				document.getElementById('searchResults').innerHTML = resultsHTML;
 			});
-			document.getElementById('searchResults').innerHTML = resultsHTML;
+		})
+		.catch((error) => {
+			// If there's an error, close the Swal and show an error message
+			Swal.fire({
+				title: 'Error!',
+				text: 'Something went wrong with the search.',
+				icon: 'error',
+				confirmButtonText: 'OK',
+			});
 		});
 });
 
 function rateBook(bookId, bookTitle) {
+	console.log('Rating book with ID: ' + bookId);
 	var rating = document.getElementById('rating-' + bookId).value;
 	var data = { isbn: bookId, title: bookTitle, rating: rating };
 	fetch('/rate', {
@@ -73,3 +98,18 @@ function rateBook(bookId, bookTitle) {
 			}
 		});
 }
+
+//listent to searchquery input submit on enter
+document.getElementById('searchQuery').addEventListener('keyup', function (e) {
+	if (e.key === 'Enter') {
+		document.getElementById('searchButton').click();
+	}
+});
+
+// document.addEventListener('DOMContentLoaded', (event) => {
+// 	const bottomAppBarHeight =
+// 		document.querySelector('.bottom-appbar').offsetHeight;
+
+// 	const searchbar = document.querySelector('.c-searchbar');
+// 	searchbar.style.bottom = `${110}px`;
+// });

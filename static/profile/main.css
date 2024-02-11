@@ -23,3 +23,42 @@ body {
 .book-info p {
 	color: #666;
 }
+.book-card {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	background: #fff;
+	border-radius: 0.5rem;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	margin-bottom: 1rem;
+}
+
+.book-cover {
+	width: 120px; /* larger cover image */
+	height: auto;
+	object-fit: cover;
+}
+
+.book-info {
+	padding: 0.5rem 1rem;
+	flex-grow: 1;
+}
+
+.book-title {
+	font-size: 1.25rem;
+	color: #333;
+	margin-bottom: 0.25rem;
+}
+
+.book-author {
+	color: #555;
+	margin-bottom: 0.5rem;
+}
+
+.book-rating {
+	font-weight: bold;
+	color: #007bff; /* Bootstrap primary color */
+}
+
+/* Adjust the bottom navigation bar as needed */

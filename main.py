@@ -4,6 +4,7 @@ import openai
 import base64
 from datetime import datetime
 import json
+from bson import ObjectId
 from pymongo import MongoClient
 from bson.json_util import dumps
 from pydantic import BaseModel
@@ -106,7 +107,7 @@ def before_request():
     # do something here
     AppHasRunBefore = True
     print('App has run before')
-    session.clear()
+    # session.clear()
     
 
 # Pydantic model for the rating data
@@ -269,25 +270,29 @@ def book_rating():
   except Exception as e:
     return jsonify({'success': False, 'message': 'An error occurred', 'details': str(e)}), 500
   
-#remove rating book 
-@app.route('/remove-rating', methods=["post"])
-def remove_book_rating():
-  #get current user
-  user_id = session.get('user_id')
-  #get data from post request
-  data = request.get_json()
-  #save data to database
-  #link user_id to rating
-  data['user_id'] = user_id
-  
-  print(data)
-  try:
-    user_ratings_collection.delete_one(data)
-  #return success message
-    return jsonify({'success': True, 'message': 'Rating removed successfully'})
-  except Exception as e:
-    return jsonify({'success': False, 'message': 'An error occurred', 'details': str(e)}), 500
 
+@app.route('/remove-rating', methods=["POST"])
+def remove_book_rating():
+    user_id = session.get('user_id')
+    data = request.get_json()
+    isbn = data.get('isbn')
+    
+    print(isbn)
+    print(user_id)
+    print(data)
+    
+    user_id_query = int(user_id) if user_id.isdigit() else user_id
+    try:
+        result = user_ratings_collection.delete_one({
+            'user_id': user_id_query, # Make sure to convert user_id to ObjectId
+            'isbn': isbn
+        })
+        if result.deleted_count > 0:
+            return jsonify({'success': True, 'message': 'Rating removed successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Rating not found or already deleted'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': 'An error occurred', 'details': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

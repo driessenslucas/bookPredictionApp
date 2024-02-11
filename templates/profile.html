@@ -12,8 +12,12 @@
 		<style></style>
 	</head>
 	<body>
-		<h1>Your Rated Books</h1>
-		<div id="ratedBooks"></div>
+		<div class="container mt-3">
+			<h1 class="text-center mb-4">Your Rated Books</h1>
+			<div id="ratedBooks" class="row">
+				<!-- Book items will be inserted here by JavaScript -->
+			</div>
+		</div>
 		<div class="bottom-appbar">
 			<div class="tabs">
 				<div class="tab is-active tab--left" onclick="redirect('search-books')">
@@ -40,6 +44,7 @@
 					: window.location.replace(`/${page}`);
 			}
 		</script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<script src="/static/profile/app.js"></script>
 	</body>
 </html>

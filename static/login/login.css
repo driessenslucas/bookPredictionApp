@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap');
+:root {
+	--global-background-color: #0056b3;
+	--global-text-color: #242424;
+}
+html.swal2-shown,
+body.swal2-shown {
+	overflow-y: hidden !important;
+	height: 100vh;
+}
+.swal2-height-auto {
+	height: 100vh !important;
+}
+html {
+	color: white;
+	font-family: 'Work Sans', sans-serif;
+}
+body {
+	height: 100vh;
+	width: 100vw;
+	margin: 0;
+}
+.c-filler {
+	background-color: var(--global-background-color);
+}
+
+.o-container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+}
+.c-login-container {
+	flex-grow: 1;
+	max-width: 680px;
+	height: 100%;
+	color: var(--global-text-color);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.c-login {
+	display: flex;
+	justify-content: center;
+	width: 400px;
+	border-radius: 12px;
+}
+.c-filler {
+	flex-grow: 4;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+h1 {
+	text-align: center;
+}
+label {
+	font-size: 0.85rem;
+	text-transform: uppercase;
+	padding-bottom: 12px;
+}
+.intro p {
+	font-size: x-large;
+	font-weight: 600;
+	text-align: center;
+}
+.intro h2 {
+	text-align: center;
+}
+.helpLink {
+	display: none;
+}
+.entry {
+	margin-left: auto;
+	margin-right: auto;
+}
+.divider h2 {
+	text-align: center;
+}
+.create {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+.intro {
+	content: '<h2>Hallo, welkom terug!</h2> <p>Login om door te gaan.</p>';
+}
+input {
+	font-family: 'Work Sans', sans-serif;
+	border: none;
+	border-bottom: 2px solid #d1d1d4;
+	background: none;
+	padding: 10px;
+	padding-left: 24px;
+	font-weight: 700;
+	transition: 0.2s;
+}
+#api {
+	padding: 24px;
+	max-width: 90vw;
+}
+
+input:active,
+input:focus,
+input:hover {
+	outline: none;
+	border-bottom-color: #0056b3;
+}
+#continue,
+#cancel,
+#next {
+	font-family: 'Work Sans', sans-serif;
+	background: #0056b3;
+	font-size: 16px;
+
+	border-radius: 8px;
+	text-transform: uppercase;
+	border: 1px solid #0056b3;
+	font-weight: 700;
+	width: 100%;
+	height: 48px;
+	color: white;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+#continue:active,
+#next:active,
+#cancel:active,
+#continue:focus,
+#next:focus,
+#cancel:focus,
+#continue:hover,
+#next:hover,
+#cancel:hover {
+	border-color: #0056b3;
+	outline: none;
+	background-color: white;
+	color: #0056b3;
+}
+.buttons {
+	display: flex;
+	justify-content: center;
+	margin-top: 48px;
+}
+
+/* label {
+	display: none;
+} */
+/* label[for='signInName'] {
+	display: inline-block;
+	height: 30px;
+	width: 27px;
+	position: absolute;
+	top: 2px;
+	content: url('https://customloginupwall.blob.core.windows.net/root/email.png');
+}
+
+label[for='password'] {
+	display: inline-block;
+	height: 30px;
+	width: 27px;
+	position: absolute;
+	top: 24px;
+	content: url('https://customloginupwall.blob.core.windows.net/root/password.png'); */
+/* } */
+
+#forgotPassword {
+	position: relative;
+	float: right;
+	top: 70px;
+	right: 28px;
+}
+#signInName::placeholder {
+	color: #0056b3;
+}
+.entry-item {
+	/* position: relative; */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-bottom: 24px;
+}
+.intro p {
+	display: block;
+}
+.intro h2 {
+	display: block;
+}
+ul {
+	text-decoration: none;
+	padding: 0;
+}
+ul li {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.attrEntry {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-bottom: 24px;
+}
+/* .password-label::before {
+	display: inline-block;
+	height: 30px;
+	width: 30px;
+	position: relative;
+	top: 20px;
+	content: url('https://customloginupwall.blob.core.windows.net/root/password.png');
+} */
+a {
+	text-decoration: none;
+	color: #0056b3;
+}
+
+@media (max-width: 990px) {
+	.c-filler {
+		display: none;
+	}
+	.c-login-container {
+		max-width: 100%;
+	}
+	.c-login {
+		-webkit-box-shadow: 3px 3px 15px 0px rgba(0, 86, 179, 1);
+		-moz-box-shadow: 3px 3px 15px 0px rgba(0, 86, 179, 1);
+		box-shadow: 3px 3px 15px 0px rgba(0, 86, 179, 1);
+	}
+}
+.c-filler-mobile {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.c-filler-picture-mobile {
+	width: 40%;
+	height: auto;
+}
+
+@media (min-width: 990px) {
+	.c-filler-mobile {
+		display: none;
+	}
+}

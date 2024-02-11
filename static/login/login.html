@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			href="./login.css"
+			rel="stylesheet"
+			type="text/css"
+			data-preload="true" />
+		<title>Login</title>
+	</head>
+	<body>
+		<div class="o-container">
+			<div class="c-login-container">
+				<div class="c-filler-mobile">
+					<img
+						class="c-filler-picture-mobile"
+						src="login.png"
+						width="466.424"
+						height="538" />
+				</div>
+				<div class="c-login">
+					<form action="/login" method="POST" class="login-form">
+						<div class="intro" id="intro">
+							<h2>Hallo, welcome back!</h2>
+							<p>Login to continue.</p>
+						</div>
+						<div class="entry-item">
+							<input
+								type="email"
+								name="username"
+								id="signInName"
+								placeholder="username"
+								required />
+						</div>
+						<div class="entry-item">
+							<input
+								type="password"
+								name="password"
+								id="password"
+								placeholder="Wachtwoord"
+								required />
+						</div>
+						<div class="buttons">
+							<button type="submit" id="continue">Login</button>
+						</div>
+						<div class="attrEntry">
+							<a href="#" id="forgotPassword">Forgot password?</a>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="c-filler">
+				<div class="c-filler-picture">
+					<img src="login.png" width="466.424" height="538" />
+				</div>
+				<div class="c-filler-title">
+					<h1 class="c-filler-title-text">Login and Discover</h1>
+				</div>
+				<div class="c-filler-quote">
+					<p class="c-filler-quote-text">
+						“Somewhere between the bottom of the climb and the summit is the
+						answer to the mystery why we climb.”
+					</p>
+					<p class="c-filler-quote-author">– Greg Child</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			console.log('test');
+		</script>
+	</body>
+</html>

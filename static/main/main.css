@@ -1,0 +1,260 @@
+body {
+	background-color: #f7f7f7; /* Light grey background */
+	font-family: 'Arial', sans-serif; /* Modern font */
+	overflow: hidden;
+	width: 566px;
+	height: 1086px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin: 0 auto;
+}
+.main-content {
+	padding-top: 20px;
+	padding-bottom: 48px;
+	width: 566px;
+	height: 1086px;
+}
+.container {
+	background-color: white;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Card-style container */
+	height: 95%;
+	width: 90%;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+.image-preview {
+	width: 100%;
+	max-height: 300px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Shadow for image */
+}
+.spinner-border {
+	width: 3rem;
+	height: 3rem;
+	display: none;
+	margin: 20px auto; /* Centrally aligned spinner */
+}
+#uploadForm {
+	order: 2;
+}
+#fileInput {
+	display: none; /* Hide the file input */
+}
+
+#btnUpload {
+	transition: background-color 0.3s ease; /* Smooth background transition */
+	justify-self: end;
+	width: 460px;
+}
+#btnUpload:hover {
+	background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* #responseArea {
+	position: absolute;
+	top: 50%;
+	left: 25%;
+	width: 50vw;
+} */
+#responseArea .alert {
+	border-radius: 5px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Shadow for alert boxes */
+}
+
+/* Updated CSS */
+.response-area {
+	width: 100%; /* Use 100% width for better responsiveness */
+	margin-top: 1rem; /* Consistent margin-top using rem units */
+	display: none; /* Initially hidden */
+}
+.alert {
+	border-radius: 0.5rem;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+	padding: 1rem;
+	margin-bottom: 1rem; /* Add space below alerts */
+}
+#imagePreview {
+	margin-top: 20px;
+	width: 100%;
+	height: 95vh;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Shadow for image */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	font-size: 36px;
+}
+
+#loadingSpinner {
+	position: absolute;
+	top: 50%;
+	left: 44%;
+}
+/* Add this to your existing style tag or CSS file */
+.sidebar {
+	display: none;
+	width: 250px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	background-color: #343a40;
+	color: white;
+	box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
+	z-index: 1000 !important;
+}
+
+.sidebar-content {
+	padding: 20px;
+}
+
+.sidebar-menu {
+	list-style: none;
+	padding: 0;
+}
+
+#sidebarCollapse {
+	z-index: 1001;
+	position: fixed;
+	top: 20px;
+	right: 36px;
+}
+
+.sidebar-menu li a {
+	color: white;
+	text-decoration: none;
+	display: block;
+	padding: 10px 20px;
+}
+
+.sidebar-menu li a:hover {
+	background-color: #495057;
+}
+
+@media screen and (max-width: 768px) {
+	.sidebar {
+		width: 100%;
+		height: auto;
+		position: fixed;
+	}
+	.main-content {
+		margin-left: 0;
+	}
+}
+/* Add this to your existing style tag or CSS file */
+.sidebar.active {
+	display: block;
+	/* margin-left: -250px; Same as the sidebar's width */
+}
+
+@media screen and (max-width: 768px) {
+	.sidebar.active {
+		margin-left: 0;
+	}
+}
+body {
+	background-color: #f7f7f7;
+	font-family: 'Arial', sans-serif;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin: 0 auto;
+}
+
+.main-content {
+	padding-top: 20px;
+	padding-bottom: 48px;
+	width: 100%; /* Adjusted for responsiveness */
+	max-width: 566px; /* Maximum width */
+	height: auto; /* Adjusted for responsiveness */
+	box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.container {
+	background-color: white;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	height: auto; /* Adjusted for responsiveness */
+	width: 100%; /* Adjusted for responsiveness */
+	max-width: 540px; /* Maximum width */
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	margin: 0 auto; /* Center the container */
+}
+
+.image-preview,
+#imagePreview {
+	width: 100%;
+	max-height: 702px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+#btnUpload {
+	transition: background-color 0.3s ease;
+	width: 100%; /* Adjusted for responsiveness */
+	max-width: 460px; /* Maximum width */
+	box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+	body {
+		width: auto; /* Adjusted for responsiveness */
+		height: 100vh;
+		overflow: auto; /* Show scrollbars when needed */
+	}
+
+	.main-content,
+	.container {
+		width: 100%;
+		max-width: none;
+		height: 100%;
+	}
+
+	#btnUpload {
+		width: 100%; /* Full width on smaller screens */
+	}
+
+	.sidebar,
+	.sidebar.active {
+		width: 100%; /* Full width sidebar on smaller screens */
+	}
+
+	#loadingSpinner {
+		left: 50%; /* Center the spinner on smaller screens */
+		/* transform: translateX(-50%); Adjust for exact centering */
+	}
+}
+
+/* Additional styles for very small devices */
+@media (max-width: 480px) {
+	.container,
+	.main-content {
+		padding: 10px;
+	}
+
+	.image-preview,
+	#imagePreview {
+		max-height: 715px; /* Smaller image preview on very small screens */
+	}
+}

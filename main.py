@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, templating, session, url_for
+from flask import Flask, request, jsonify, templating, session, url_for, redirect, render_template
 import os
 import openai
 import base64
@@ -15,6 +15,7 @@ client = MongoClient(f'mongodb://mongo:27017/',
                      password=mongo_pass)
 db = client['book_app']
 collection = db['user_requests']
+users_collection = db['users']
 
 
 def process(image_path, user_id='1'):
@@ -113,12 +114,22 @@ def redirect_to_home():
 
 @app.route('/login', methods=['POST'])
 def login():
-  # Get the user_id from the request
-  user_id = request.form.get('user_id')
-  # Set the user_id in the session
-  session['user_id'] = user_id
-  # Redirect to the home page
-  return templating.render_template('index.html')
+  data = request.get_json()  # Get data as JSON
+  username = data.get('username')
+  password = data.get('password')
+
+  # Assuming users_collection is your MongoDB collection for users
+  user = users_collection.find_one({'username': username})
+
+  print(user)
+  print(username)
+  print(password)
+  
+  if user and user['password'] == password:  # Reminder: Hash passwords in a real application
+    session['user_id'] = str(user['_id'])  # Use the MongoDB ID as the session identifier
+    return jsonify({'success': True, 'message': 'Login Successful'})
+  else:
+    return jsonify({'success': False, 'message': 'Invalid username or password'})
 
 @app.route('/logout')
 def logout():
@@ -127,9 +138,13 @@ def logout():
   # Redirect to login or home page
   return templating.render_template('index.html')
 
+@app.route('/main')
+def main():
+  if 'user_id' not in session:
+      return redirect(url_for('index'))
+  return render_template('prediction.html')
+
   
-
-
 @app.route('/get-user-data/<user_id>', methods=['GET'])
 def get_user_data(user_id):
     # Convert user_id to the correct type if necessary (e.g., int or string)

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Book predictions</title>
+		<link
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+			rel="stylesheet" />
+		<link rel="stylesheet" href="/static/main/main.css" />
+	</head>
+	<body>
+		<div id="sidebar" class="sidebar">
+			<div class="sidebar-content">
+				<h3>User Profile</h3>
+				<!-- Add navigation links or content here -->
+				<ul class="sidebar-menu">
+					<li><a href="#">Home</a></li>
+					<li>
+						<a href="{{ url_for('user_profile') }}">Profile and reviews</a>
+					</li>
+					<li><a href="#">Settings</a></li>
+					<li><a href="{{ url_for('logout') }}">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+		<button type="button" id="sidebarCollapse" class="btn btn-info">
+			<i class="fas fa-align-left"></i>
+			<span>Toggle Sidebar</span>
+		</button>
+
+		<div class="main-content">
+			<div class="container">
+				<h2 class="text-center">Book Predict</h2>
+				<form id="uploadForm" enctype="multipart/form-data">
+					<div class="form-group">
+						<input
+							type="file"
+							name="file"
+							class="form-control-file"
+							id="fileInput"
+							accept="image/*;capture=camera" />
+					</div>
+					<button
+						type="button"
+						class="btn btn-primary btn-block"
+						id="btnUpload">
+						Upload
+					</button>
+				</form>
+				<div class="spinner-border" role="status" id="loadingSpinner">
+					<span class="sr-only">Loading...</span>
+				</div>
+				<div id="imagePreview">
+					<b id="uploadText"
+						>Click here to <br />
+						upload image</b
+					>
+					<img
+						id="prevImg"
+						src="#"
+						alt="Image Preview"
+						class="image-preview"
+						style="display: none" />
+				</div>
+
+				<div id="responseArea" class="response-area mt-3"></div>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="/static/main/app.js"></script>
+	</body>
+</html>

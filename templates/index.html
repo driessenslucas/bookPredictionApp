@@ -2,317 +2,76 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Book predictions</title>
+		<title>Login</title>
 		<link
-			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-			rel="stylesheet" />
-		<style>
-			body {
-				background-color: #f7f7f7; /* Light grey background */
-				font-family: 'Arial', sans-serif; /* Modern font */
-				overflow: hidden;
-				width: 566px;
-				height: 1086px;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				flex-direction: column;
-				margin: 0 auto;
-			}
-			.main-content {
-				padding-top: 20px;
-				padding-bottom: 48px;
-				width: 566px;
-				height: 1086px;
-			}
-			.container {
-				background-color: white;
-				padding: 20px;
-				border-radius: 5px;
-				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Card-style container */
-				height: 95%;
-				width: 90%;
-				display: flex;
-				align-items: center;
-				flex-direction: column;
-			}
-			.image-preview {
-				width: 100%;
-				max-height: 300px;
-				margin-bottom: 20px;
-				border-radius: 5px;
-				box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Shadow for image */
-			}
-			.spinner-border {
-				width: 3rem;
-				height: 3rem;
-				display: none;
-				margin: 20px auto; /* Centrally aligned spinner */
-			}
-			#uploadForm {
-				order: 2;
-			}
-			#fileInput {
-				display: none; /* Hide the file input */
-			}
-
-			#btnUpload {
-				transition: background-color 0.3s ease; /* Smooth background transition */
-				justify-self: end;
-				width: 460px;
-			}
-			#btnUpload:hover {
-				background-color: #0056b3; /* Darker blue on hover */
-			}
-
-			#responseArea {
-				position: absolute;
-				top: 50%;
-				left: 25%;
-				width: 50vw;
-			}
-			#responseArea .alert {
-				border-radius: 5px;
-				box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Shadow for alert boxes */
-			}
-
-			#imagePreview {
-				margin-top: 20px;
-				width: 100%;
-				height: 80vh;
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				margin-bottom: 20px;
-				border-radius: 5px;
-				box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Shadow for image */
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				text-align: center;
-				font-size: 36px;
-			}
-
-			#loadingSpinner {
-				position: absolute;
-				top: 50%;
-				left: 44%;
-			}
-			/* Add this to your existing style tag or CSS file */
-			.sidebar {
-				display: none;
-				width: 250px;
-				position: fixed;
-				top: 0;
-				left: 0;
-				height: 100vh;
-				background-color: #343a40;
-				color: white;
-				box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
-				z-index: 1000 !important;
-			}
-
-			.sidebar-content {
-				padding: 20px;
-			}
-
-			.sidebar-menu {
-				list-style: none;
-				padding: 0;
-			}
-
-			#sidebarCollapse {
-				z-index: 1001;
-				position: fixed;
-				top: 20px;
-				right: 36px;
-			}
-
-			.sidebar-menu li a {
-				color: white;
-				text-decoration: none;
-				display: block;
-				padding: 10px 20px;
-			}
-
-			.sidebar-menu li a:hover {
-				background-color: #495057;
-			}
-
-			@media screen and (max-width: 768px) {
-				.sidebar {
-					width: 100%;
-					height: auto;
-					position: fixed;
-				}
-				.main-content {
-					margin-left: 0;
-				}
-			}
-			/* Add this to your existing style tag or CSS file */
-			.sidebar.active {
-				display: block;
-				margin-left: -250px; /* Same as the sidebar's width */
-			}
-
-			@media screen and (max-width: 768px) {
-				.sidebar.active {
-					margin-left: 0;
-				}
-			}
-		</style>
+			href="/static/login/login.css"
+			rel="stylesheet"
+			type="text/css"
+			data-preload="true" />
 	</head>
 	<body>
-		<div id="sidebar" class="sidebar">
-			<div class="sidebar-content">
-				<h3>User Profile</h3>
-				<!-- Add navigation links or content here -->
-				<ul class="sidebar-menu">
-					<li><a href="#">Home</a></li>
-					<li>
-						<a href="{{ url_for('user_profile') }}">Profile and reviews</a>
-					</li>
-					<li><a href="#">Settings</a></li>
-					<li><a href="{{ url_for('logout') }}">Logout</a></li>
-				</ul>
-			</div>
-		</div>
-		<button type="button" id="sidebarCollapse" class="btn btn-info">
-			<i class="fas fa-align-left"></i>
-			<span>Toggle Sidebar</span>
-		</button>
-
-		<div class="main-content">
-			<div class="container">
-				<h2 class="text-center">Book Predict</h2>
-				<form id="uploadForm" enctype="multipart/form-data">
-					<div class="form-group">
-						<input
-							type="file"
-							name="file"
-							class="form-control-file"
-							id="fileInput"
-							accept="image/*;capture=camera" />
-					</div>
-					<button
-						type="button"
-						class="btn btn-primary btn-block"
-						id="btnUpload">
-						Upload
-					</button>
-				</form>
-				<div class="spinner-border" role="status" id="loadingSpinner">
-					<span class="sr-only">Loading...</span>
-				</div>
-				<div id="imagePreview">
-					<b id="uploadText"
-						>Click here to <br />
-						upload image</b
-					>
+		<div class="o-container">
+			<div class="c-login-container">
+				<div class="c-filler-mobile">
 					<img
-						id="prevImg"
-						src="#"
-						alt="Image Preview"
-						class="image-preview"
-						style="display: none" />
+						class="c-filler-picture-mobile"
+						src="/static/login/book.png"
+						width="466.424"
+						height="538" />
 				</div>
-
-				<div id="responseArea" class="mt-3"></div>
+				<div class="c-login">
+					<form action="" onsubmit="return false" class="login-form">
+						<div class="intro" id="intro">
+							<h2>Hallo, welcome back!</h2>
+							<p>Login to continue.</p>
+						</div>
+						<div class="entry-item">
+							<input
+								type="text"
+								name="username"
+								id="signInName"
+								placeholder="username"
+								required />
+						</div>
+						<div class="entry-item">
+							<input
+								type="password"
+								name="password"
+								id="password"
+								placeholder="password"
+								required />
+						</div>
+						<div class="buttons">
+							<button type="submit" id="continue">Login</button>
+						</div>
+						<div class="attrEntry">
+							<a href="#" id="forgotPassword">Forgot password?</a>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="c-filler">
+				<div class="c-filler-picture">
+					<img src="/static/login/login.png" width="466.424" height="538" />
+				</div>
+				<div class="c-filler-title">
+					<h1 class="c-filler-title-text">Login and Discover</h1>
+				</div>
+				<div class="c-filler-quote">
+					<p class="c-filler-quote-text">
+						“Somewhere between the bottom of the climb and the summit is the
+						answer to the mystery why we climb.”
+					</p>
+					<p class="c-filler-quote-author">– Greg Child</p>
+				</div>
 			</div>
 		</div>
-
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script>
-			$(document).ready(function () {
-				$('#sidebarCollapse').on('click', function () {
-					$('#sidebar').toggleClass('active');
-					$(this).toggleClass('active');
-
-					//if sidebar is active disable the main content
-					if ($('#sidebar').hasClass('active')) {
-						$('.main-content').css('pointer-events', 'none');
-						//make the main content look greyed out
-						$('.main-content').css('background-color', 'rgba(0, 0, 0, 0.5)');
-						$('.main-content').css('opacity', '0.5');
-						$('.container').css('background-color', 'rgba(0, 0, 0, 0.5)');
-						$('.container').css('opacity', '0.5');
-					} else {
-						$('.main-content').css('pointer-events', 'auto');
-						$('.main-content').css('background-color', 'rgba(0, 0, 0, 0)');
-						$('.main-content').css('opacity', '1');
-						$('.container').css('background-color', 'rgba(0, 0, 0, 0)');
-						$('.container').css('opacity', '1');
-					}
-				});
-			});
-			$('#imagePreview').click(function () {
-				$('#fileInput').click();
-			});
-
-			$(document).ready(function () {
-				$('#fileInput').change(function (e) {
-					var reader = new FileReader();
-					reader.onload = function (e) {
-						// $('#imagePreview').attr('src', e.target.result).show();
-						// set as background image for the image preview
-						$('#imagePreview')
-							.css('background-image', 'url(' + e.target.result + ')')
-							.show();
-						$('#uploadText').hide();
-						$('#ResponseArea').hide();
-					};
-					reader.readAsDataURL(e.target.files[0]);
-				});
-
-				$('#btnUpload').click(function () {
-					$('#responseArea').hide();
-
-					$('#loadingSpinner').show();
-					var formData = new FormData();
-					formData.append('file', $('#fileInput')[0].files[0]);
-
-					$.ajax({
-						url: '/upload-image',
-						type: 'POST',
-						data: formData,
-						processData: false,
-						contentType: false,
-						success: function (data) {
-							$('#loadingSpinner').hide();
-							data = data.response;
-							console.log(data);
-							displayResponse(data);
-						},
-						error: function () {
-							$('#loadingSpinner').hide();
-							$('#responseArea')
-								.html(
-									"<div class='alert alert-danger'>Error processing the request.</div>"
-								)
-								.show();
-						},
-					});
-				});
-
-				function displayResponse(data) {
-					// Ensure data is parsed as an object if it's a JSON string
-					if (typeof data === 'string') {
-						data = JSON.parse(data);
-					}
-					var responseHTML = "<div class='alert alert-success'>";
-					if (data && data.book_title) {
-						responseHTML += '<h4>Book Title: ' + data.book_title + '</h4>';
-						responseHTML +=
-							'<p>Predicted Rating: ' + data.predicted_rating + '</p>';
-						responseHTML += '<p>Reason: ' + data.reason + '</p>';
-					} else {
-						responseHTML += '<p>No data to display.</p>';
-					}
-					responseHTML += '</div>';
-					$('#responseArea').html(responseHTML).show();
-				}
-			});
+			console.log('test');
 		</script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="/static/login/app.js"></script>
 	</body>
 </html>

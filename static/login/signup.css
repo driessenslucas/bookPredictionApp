@@ -1,0 +1,292 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap');
+:root {
+	--global-background-color: #f69f6d;
+	--global-text-color: #242424;
+}
+html {
+	color: white;
+	font-family: 'Work Sans', sans-serif;
+}
+body {
+	height: 100vh;
+	width: 100vw;
+	margin: 0;
+}
+.c-filler {
+	background-color: var(--global-background-color);
+}
+
+.o-container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+}
+.c-login-container {
+	flex-grow: 1;
+	max-width: 680px;
+	height: 100%;
+	color: var(--global-text-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.c-login {
+	width: 400px;
+	margin: 0 auto;
+	border-radius: 12px;
+}
+.c-filler {
+	flex-grow: 4;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+h1 {
+	text-align: center;
+}
+label {
+	font-size: 0.85rem;
+	text-transform: uppercase;
+	padding-bottom: 12px;
+}
+.intro p {
+	font-size: x-large;
+	font-weight: 600;
+	text-align: center;
+}
+.helpLink {
+	display: none;
+}
+.entry {
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.divider h2 {
+	text-align: center;
+}
+.create {
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.intro {
+	content: '<h2>Hallo, welkom terug!</h2> <p>Login om door te gaan.</p>';
+}
+input {
+	font-family: 'Work Sans', sans-serif;
+	border: none;
+	border-bottom: 2px solid #d1d1d4;
+	background: none;
+	padding: 10px;
+	padding-left: 24px;
+	font-weight: 700;
+	transition: 0.2s;
+}
+#api {
+	padding: 24px;
+}
+
+input:active,
+input:focus,
+input:hover {
+	outline: none;
+	border-bottom-color: #f1600d;
+}
+
+#cancel {
+	font-family: 'Work Sans', sans-serif;
+	background: white;
+	font-size: 16px;
+
+	border-radius: 8px;
+	text-transform: uppercase;
+	border: 1px solid #f1600d;
+	font-weight: 700;
+	height: 48px;
+	max-width: 376px;
+	width: 100%;
+	color: #f1600d;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+button {
+	font-family: 'Work Sans', sans-serif;
+	background: #f1600d;
+	font-size: 16px;
+	border-radius: 8px;
+	text-transform: uppercase;
+	border: 1px solid white;
+	font-weight: 700;
+	max-width: 376px;
+	width: 100%;
+	height: 48px;
+	color: white;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+button:active,
+button:focus,
+button:hover {
+	background-color: white;
+	color: #f1600d;
+	border: 1px solid #f1600d;
+	border-color: #f1600d;
+	outline: none;
+}
+
+#cancel:active,
+#cancel:focus,
+#cancel:hover {
+	background-color: #f1600d;
+	color: white;
+	outline: none;
+}
+.buttons {
+	display: flex;
+	justify-content: center;
+	gap: 24px;
+}
+
+/* button:hover + #cancel {
+	background-color: #f1600d;
+	color: white;
+	border: 1px solid #f1600d;
+	border-color: #f1600d;
+	outline: none;
+}
+*/
+
+/* button:has(+ #cancel:hover) {
+	background-color: white;
+	color: #f1600d;
+	border: 1px solid white;
+	border-color: #f1600d;
+	outline: none;
+} */
+
+/* label {
+	display: none;
+} */
+/* label[for='signInName'] {
+	display: inline-block;
+	height: 30px;
+	width: 27px;
+	position: absolute;
+	top: 2px;
+	content: url('https://customloginupwall.blob.core.windows.net/root/email.png');
+}
+
+label[for='password'] {
+	display: inline-block;
+	height: 30px;
+	width: 27px;
+	position: absolute;
+	top: 24px;
+	content: url('https://customloginupwall.blob.core.windows.net/root/password.png'); */
+/* } */
+
+#forgotPassword {
+	position: relative;
+	float: right;
+	top: 70px;
+	right: 28px;
+}
+#signInName::placeholder {
+	color: #f1600d;
+}
+.entry-item {
+	position: relative;
+}
+.intro p {
+	display: block;
+}
+ul {
+	text-decoration: none;
+	padding: 0;
+}
+ul li {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.attrEntry {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-bottom: 24px;
+	/* gap: 18px; */
+}
+/* .password-label::before {
+	display: inline-block;
+	height: 30px;
+	width: 30px;
+	position: relative;
+	top: 20px;
+	content: url('https://customloginupwall.blob.core.windows.net/root/password.png');
+} */
+a {
+	text-decoration: none;
+	color: #f1600d;
+}
+
+@media (max-width: 990px) {
+	.c-filler {
+		display: none;
+	}
+	.c-login-container {
+		max-width: 100%;
+	}
+	.c-login {
+		-webkit-box-shadow: 3px 3px 15px 0px rgba(241, 97, 13, 1);
+		-moz-box-shadow: 3px 3px 15px 0px rgba(241, 97, 13, 1);
+		box-shadow: 3px 3px 15px 0px rgba(241, 97, 13, 1);
+	}
+}
+.changeClaims {
+	visibility: hidden;
+}
+.buttons.verify {
+	margin-top: 24px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+.verificationInfoText {
+	display: block;
+	margin-bottom: 24px;
+}
+#email_ver_but_edit {
+	display: none;
+}
+
+.error {
+	color: #f1600d;
+}
+.verificationSuccessText {
+	color: green;
+}
+.c-filler-mobile {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.c-filler-picture-mobile {
+	width: 40%;
+	height: auto;
+}
+
+@media (min-width: 990px) {
+	.c-filler-mobile {
+		display: none;
+	}
+}

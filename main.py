@@ -6,7 +6,7 @@ from datetime import datetime
 import json
 from pymongo import MongoClient
 from bson.json_util import dumps
-
+from pydantic import BaseModel
 # Assuming MongoDB service is named 'mongo' in your docker-compose and the database name is 'your_database_name'
 mongo_user = os.environ.get('MONGO_INITDB_ROOT_USERNAME', 'root')
 mongo_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'root123')
@@ -16,6 +16,7 @@ client = MongoClient(f'mongodb://mongo:27017/',
 db = client['book_app']
 collection = db['user_requests']
 users_collection = db['users']
+user_ratings_collection = db['user_ratings']
 
 
 def process(image_path, user_id='1'):
@@ -95,6 +96,25 @@ app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif'])
 app.secret_key = os.environ.get('SECRET_KEY', 'dev')
 
 
+# do something before the first request is processed
+AppHasRunBefore = False
+
+@app.before_request
+def before_request():
+  global AppHasRunBefore
+  if not AppHasRunBefore:
+    # do something here
+    AppHasRunBefore = True
+    print('App has run before')
+    session.clear()
+    
+
+# Pydantic model for the rating data
+class RatingData(BaseModel):
+    book_title: str
+    rating: int
+
+
 @app.route('/')
 def index():
   #return template
@@ -103,8 +123,10 @@ def index():
 @app.route('/user-profile')
 def user_profile():
   # Do some processing here if needed
+  if 'user_id' not in session:
+    return redirect(url_for('index'))
   
-  return templating.render_template('profile.html')  # Assuming 'profile.html' is under the 'templates' directory
+  return templating.render_template('profile.html')  # Assuming 'search.html' is under the 'templates' directory
   
 
 @app.route('/redirect-to-home')
@@ -144,20 +166,36 @@ def main():
       return redirect(url_for('index'))
   return render_template('prediction.html')
 
-  
+@app.route('/search-books')
+def search_books():
+  if 'user_id' not in session:
+      return redirect(url_for('index'))
+  return render_template('search.html')
+
 @app.route('/get-user-data/<user_id>', methods=['GET'])
 def get_user_data(user_id):
-    # Convert user_id to the correct type if necessary (e.g., int or string)
-    user_id_query = int(user_id) if user_id.isdigit() else user_id
+  # Convert user_id to the correct type if necessary (e.g., int or string)
+  user_id_query = int(user_id) if user_id.isdigit() else user_id
 
-    # Query the collection for documents where `user_id` matches the provided value
-    user_requests = collection.find({'user_id': user_id_query})
+  # Query the collection for documents where `user_id` matches the provided value
+  user_requests = collection.find({'user_id': user_id_query})
 
-    # Convert the query result to a list and then serialize to JSON
-    user_requests_json = dumps(list(user_requests))
-    
-    return user_requests_json
+  # Convert the query result to a list and then serialize to JSON
+  user_requests_json = dumps(list(user_requests))
+  
+  return user_requests_json
 
+@app.route('/get-user-ratings', methods=['GET'])
+def get_user_ratings():
+  #get current user
+  user_id = session.get('user_id')
+  # Query the collection for documents where `user_id` matches the provided value
+  user_ratings = user_ratings_collection.find({'user_id': user_id})
+
+  # Convert the query result to a list and then serialize to JSON
+  user_ratings_json = dumps(list(user_ratings))
+  
+  return user_ratings_json
 
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
@@ -172,5 +210,85 @@ def upload_image():
   response = json.loads(response)
   return jsonify({'response': response})
 
+import requests
+
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('query', '')
+    url = f'https://www.googleapis.com/books/v1/volumes?q={query}'
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Will raise an HTTPError for bad requests (4XX or 5XX)
+        
+        # The response is already in JSON, so you can directly return it or process it as needed
+        books_data = response.json()
+        books = parse_google_books_response(books_data)
+
+        return jsonify(books)
+
+    except requests.exceptions.HTTPError as err:
+        return jsonify({'error': 'API request unsuccessful', 'details': str(err)}), 500
+    except Exception as e:
+        return jsonify({'error': 'An error occurred', 'details': str(e)}), 500
+
+def parse_google_books_response(data):
+    # This function should parse the JSON response from Google Books
+    # and return a list of books in a JSON-compatible format.
+    books = []
+    for item in data.get('items', []):
+        book_info = item.get('volumeInfo', {})
+        books.append({
+            'title': book_info.get('title'),
+            'isbn': book_info.get('industryIdentifiers', [{}])[0].get('identifier'),  # Assuming the first identifier is the ISBN
+            'authors': book_info.get('authors', []),
+            'publisher': book_info.get('publisher'),
+            'publishedDate': book_info.get('publishedDate'),
+            'description': book_info.get('description'),
+            'thumbnail': book_info.get('imageLinks', {}).get('thumbnail'),
+            'infoLink': book_info.get('infoLink')
+        })
+    return books
+  
+#save rating book 
+@app.route('/rate', methods=["post"])
+def book_rating():
+  #get current user
+  user_id = session.get('user_id')
+  #get data from post request
+  data = request.get_json()
+  #save data to database
+  #link user_id to rating
+  data['user_id'] = user_id
+  
+  print(data)
+  try:
+    user_ratings_collection.insert_one(data)
+  #return success message
+    return jsonify({'success': True, 'message': 'Rating saved successfully'})
+  except Exception as e:
+    return jsonify({'success': False, 'message': 'An error occurred', 'details': str(e)}), 500
+  
+#remove rating book 
+@app.route('/remove-rating', methods=["post"])
+def remove_book_rating():
+  #get current user
+  user_id = session.get('user_id')
+  #get data from post request
+  data = request.get_json()
+  #save data to database
+  #link user_id to rating
+  data['user_id'] = user_id
+  
+  print(data)
+  try:
+    user_ratings_collection.delete_one(data)
+  #return success message
+    return jsonify({'success': True, 'message': 'Rating removed successfully'})
+  except Exception as e:
+    return jsonify({'success': False, 'message': 'An error occurred', 'details': str(e)}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+    #clear session data

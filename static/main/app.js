@@ -42,7 +42,14 @@ $(document).ready(function () {
 	$('#btnUpload').click(function () {
 		$('#responseArea').hide();
 
-		Swal.fire('Please wait');
+		Swal.fire({
+			heightAuto: false,
+			title: 'Processing the image...',
+			icon: 'info',
+			showCancelButton: false,
+			showConfirmButton: false,
+		});
+
 		Swal.showLoading();
 		var formData = new FormData();
 		formData.append('file', $('#fileInput')[0].files[0]);
@@ -61,44 +68,49 @@ $(document).ready(function () {
 			},
 			error: function () {
 				Swal.close();
-				$('#responseArea')
-					.html(
-						"<div class='alert alert-danger'>Error processing the request.</div>"
-					)
-					.show();
+				//show in sweet alert
+				Swal.fire({
+					heightAuto: false,
+					title: 'Error processing the request',
+					icon: 'error',
+					showCancelButton: false,
+					showConfirmButton: true,
+				});
+				// $('#responseArea')
+				// 	.html(
+				// 		"<div class='alert alert-danger'>Error processing the request.</div>"
+				// 	)
+				// 	.show();
 			},
 		});
 	});
 
 	function displayResponse(data) {
-		if (typeof data === 'string') {
-			try {
-				data = JSON.parse(data);
-			} catch (e) {
-				console.error('Parsing error:', e);
-				$('#responseArea')
-					.html(
-						"<div class='alert alert-danger'>Error processing the request.</div>"
-					)
-					.show();
-				return;
-			}
-		}
-
-		var responseHTML = "<div class='alert alert-success'>";
-		if (data && data.book_title) {
-			responseHTML +=
-				'<h4>Book Title: ' + $('<div>').text(data.book_title).html() + '</h4>';
-			responseHTML +=
-				'<p>Predicted Rating: ' +
-				$('<div>').text(data.predicted_rating).html() +
-				'</p>';
-			responseHTML +=
-				'<p>Reason: ' + $('<div>').text(data.reason).html() + '</p>';
-		} else {
-			responseHTML += '<p>No data to display.</p>';
-		}
-		responseHTML += '</div>';
-		$('#responseArea').html(responseHTML).fadeIn();
+		//show in sweet alert
+		Swal.fire({
+			heightAuto: false,
+			title: `<strong>Predicted Rating: ${data.predicted_rating}</strong>`,
+			html: `
+	<div style="padding: 1em; background-color: #f7f7f7; border-radius: 5px; margin-to
+	<p style="margin: 0; font-weight: bold;">${data.book_title}</p>
+	<p style="margin: 0;">Reason: ${data.reason}</p>
+	</div>
+	`,
+			icon: 'success',
+			showCancelButton: false,
+			showConfirmButton: true,
+			confirmButtonText: 'OK',
+			confirmButtonColor: '#3085d6', // Use a color that matches your site's theme.
+			cancelButtonColor: '#d33',
+			buttonsStyling: true,
+			customClass: {
+				popup: 'custom-swal',
+			},
+		});
 	}
+});
+// on document load
+document.addEventListener('DOMContentLoaded', function () {
+	//clear upload input
+	$('#fileInput').val('');
 });

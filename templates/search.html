@@ -3,17 +3,20 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>User Rated Books</title>
+		<title>Book Search and Rating</title>
 		<link
 			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 			rel="stylesheet" />
 		<link rel="stylesheet" href="/static/main/app.css" />
-		<link rel="stylesheet" href="/static/profile/main.css" />
-		<style></style>
+		<link rel="stylesheet" href="/static/search/main.css" />
 	</head>
 	<body>
-		<h1>Your Rated Books</h1>
-		<div id="ratedBooks"></div>
+		<div class="c-searchbar">
+			<input type="text" id="searchQuery" placeholder="Search for books..." />
+			<button id="searchButton">Search</button>
+		</div>
+
+		<div id="searchResults"></div>
 		<div class="bottom-appbar">
 			<div class="tabs">
 				<div class="tab is-active tab--left" onclick="redirect('search-books')">
@@ -40,6 +43,8 @@
 					: window.location.replace(`/${page}`);
 			}
 		</script>
-		<script src="/static/profile/app.js"></script>
+
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="/static/search/app.js"></script>
 	</body>
 </html>

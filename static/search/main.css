@@ -1,0 +1,120 @@
+body {
+	font-family: Arial, sans-serif;
+	padding: 20px;
+	background-color: #f7f7f7;
+}
+#searchQuery {
+	width: calc(100% - 120px);
+	padding: 10px;
+	margin-right: 5px;
+}
+#searchButton {
+	padding: 10px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+#searchButton:hover {
+	background-color: #0056b3;
+}
+#searchResults {
+	margin-top: 20px;
+}
+.book {
+	background-color: white;
+	padding: 15px;
+	margin-bottom: 10px;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.book img {
+	float: left;
+	margin-right: 15px;
+}
+.book h4 {
+	margin: 0;
+	color: #333;
+}
+.book p {
+	margin: 5px 0;
+}
+.book input[type='number'] {
+	margin-right: 5px;
+}
+.clear {
+	clear: both;
+}
+.book {
+	/* ... existing styles ... */
+	margin-bottom: 20px;
+}
+
+.book-cover {
+	width: 100px;
+	height: 150px;
+	object-fit: cover;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-details {
+	margin-left: 120px; /* Make room for the book cover */
+}
+
+.rating-section {
+	background-color: #f0f0f0; /* Light grey background for the rating section */
+	padding: 10px;
+	border-radius: 4px;
+	margin-top: 10px; /* Space from the book description */
+	display: flex;
+	justify-content: space-between; /* Space out the elements */
+	align-items: center;
+}
+
+.rating-section input[type='number'] {
+	width: 80px; /* Slightly larger input */
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	margin-right: 10px;
+}
+
+.rating-section button {
+	background-color: #4caf50; /* Material Design Green */
+	color: white;
+	padding: 10px 15px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.rating-section button:hover {
+	background-color: #43a047; /* Slightly darker green */
+}
+
+.more-info-link {
+	padding: 10px 15px;
+	background-color: #2196f3; /* Material Design Blue */
+	color: white;
+	text-decoration: none;
+	border-radius: 4px;
+	transition: background-color 0.3s;
+}
+
+.more-info-link:hover {
+	background-color: #1e88e5; /* Slightly darker blue */
+}
+
+.c-description {
+	max-height: 120px;
+	overflow: scroll;
+}
+
+.c-searchbar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

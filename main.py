@@ -26,18 +26,46 @@ user_ratings_collection = db['user_ratings']
 
 def process(image_path, user_id='1'):
   
-  books = [
-    "The Secret History",
-    "A little life",
-    "Book of night",
-    "Cruel Prince",
-    "Babel",
-    "Normal People",
-    "Happy Place"
+  # books = [
+  #   "The Secret History",
+  #   "A little life",
+  #   "Book of night",
+  #   "Cruel Prince",
+  #   "Babel",
+  #   "Normal People",
+  #   "Happy Place"
+  # ]
+  # ratings = [
+  # 5, 5, 2, 1, 5, 3, 4
+  # ]
+  
+  #get books and ratings from user
+  user_id = session['user_id']
+    # Query the collection for documents where `user_id` matches the provided value
+  user_ratings = user_ratings_collection.find({'user_id': user_id})
+
+  # Convert the query result to a list and then serialize to JSON
+  user_ratings_json = dumps(list(user_ratings))
+  
+  # Given data
+  books_data = [
+      {
+          "_id": "65c9d7f8c272b188e606d6d6",
+          "isbn": "9781509807864",
+          "title": "The Nix",
+          "rating": "5",
+          "user_id": "65c9d7a39e65758eb341640f"
+      }
   ]
-  ratings = [
-  5, 5, 2, 1, 5, 3, 4
-  ]
+
+  # Function to extract book titles and ratings
+  def get_titles_and_ratings(books):
+      return [(book["title"], book["rating"]) for book in books]
+
+  # Test the function with the provided data
+  titles_and_ratings = get_titles_and_ratings(books_data)
+  
+  
 
   #get api from env 
   api_key = os.environ['OPENAI_API_KEY']
@@ -51,7 +79,7 @@ def process(image_path, user_id='1'):
     "model": "gpt-4-vision-preview",
     "messages": [
       # Example of a previous user message
-      {"role": "user", "content": f"these are my books and their ratings {books}, {ratings}"},
+      {"role": "user", "content": f"these are my books and their ratings {titles_and_ratings}"},
       # Assuming you can structure an image upload or reference in a compatible way
       {
       "role": "user",

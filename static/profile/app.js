@@ -68,7 +68,7 @@ function createBookCard(book, rating) {
 	return `
     <div class="col-md-6">
       <div class="book-card">
-        <img src="${book.imageLinks.thumbnail}" alt="${
+				<img src="${book.imageLinks?.thumbnail || ''}" alt="${
 		book.title
 	}" class="book-cover">
         <div class="book-info">

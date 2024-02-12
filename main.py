@@ -250,7 +250,8 @@ def upload_image():
   response = process(file, user_id)
     # Remove backticks from the response if present
   cleaned_response = response.replace("```", "").strip()
-  cleaned_response = response.replace("json", "")
+  
+  cleaned_response = cleaned_response.replace("json", "")
   
   print(cleaned_response)
 

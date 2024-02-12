@@ -5,6 +5,7 @@ import base64
 from datetime import datetime
 import json
 from bson import ObjectId
+
 from pymongo import MongoClient
 from bson.json_util import dumps
 from pydantic import BaseModel
@@ -41,30 +42,33 @@ def process(image_path, user_id='1'):
   
   #get books and ratings from user
   user_id = session['user_id']
-    # Query the collection for documents where `user_id` matches the provided value
-  user_ratings = user_ratings_collection.find({'user_id': user_id})
-
-  # Convert the query result to a list and then serialize to JSON
-  user_ratings_json = dumps(list(user_ratings))
+  # Query the collection for documents where `user_id` matches the provided value
+  print('user_id:', user_id)
+  #find user data
+  user_data = users_collection.find_one({'_id': ObjectId(user_id)})
+  user_data_json = json.loads(dumps(user_data))
+  print("user data:",user_data_json)
   
-  # Given data
-  books_data = [
-      {
-          "_id": "65c9d7f8c272b188e606d6d6",
-          "isbn": "9781509807864",
-          "title": "The Nix",
-          "rating": "5",
-          "user_id": "65c9d7a39e65758eb341640f"
-      }
-  ]
+  # Convert the query result to a list and then serialize to JSON
+  user_name = user_data_json['username']
+  print(user_name)
+  
+  user_ratings = user_ratings_collection.find({'user_id': user_id})
+  user_ratings_json = dumps(list(user_ratings))
+
+
+  print(user_ratings_json)
+
+ # Deserialize JSON string back to Python list of dictionaries
+  user_ratings_data = json.loads(user_ratings_json)
 
   # Function to extract book titles and ratings
   def get_titles_and_ratings(books):
       return [(book["title"], book["rating"]) for book in books]
 
-  # Test the function with the provided data
-  titles_and_ratings = get_titles_and_ratings(books_data)
-  
+  # Test the function with the parsed data
+  titles_and_ratings = get_titles_and_ratings(user_ratings_data)
+
   
 
   #get api from env 
@@ -86,8 +90,7 @@ def process(image_path, user_id='1'):
         "content": [
           {
             "type": "text",
-            "text": "can you get the titles of the books in this image? Based on the user's previous ratings, give the new book(s) a rating from 1-5. \
-            Please provide reasons for your prediction in less than 2 sentences json format, with these fields 'book_title' 'predicted_rating' 'reason'. give no other text."
+            "text": f"can you get the titles of the books in this image? Based on the user's previous ratings, give the new book(s) a rating from 1-5. The user is named {user_name}. Provide reasons the user would like the books in less than 2 sentences. Return in JSON, with these fields: 'book_title', 'predicted_rating', 'reason'. Give no other text.",
           },
           {
             "type": "image_url",
@@ -139,7 +142,7 @@ def before_request():
     # do something here
     AppHasRunBefore = True
     print('App has run before')
-    session.clear()
+    # session.clear()
     
 
 # Pydantic model for the rating data
@@ -245,9 +248,19 @@ def upload_image():
   # pass the file to the process function
   user_id = session.get('user_id', '1')
   response = process(file, user_id)
-  # response = process(file)
-  response = json.loads(response)
-  return jsonify({'response': response})
+    # Remove backticks from the response if present
+  cleaned_response = response.replace("```", "").strip()
+  cleaned_response = response.replace("json", "")
+  
+  print(cleaned_response)
+
+  try:
+      response_dict = json.loads(cleaned_response)
+  except json.JSONDecodeError as e:
+      print(f"JSON decoding error: {e}")
+      return jsonify({'error': 'Error parsing the process response'})
+
+  return jsonify({'response': response_dict})
 
 
 

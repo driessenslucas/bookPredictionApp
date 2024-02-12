@@ -25,18 +25,24 @@ $('#imagePreview').click(function () {
 });
 
 $(document).ready(function () {
+	$('#btnUpload').prop('disabled', true); // Disable upload button if no file is selected
 	$('#fileInput').change(function (e) {
-		var reader = new FileReader();
-		reader.onload = function (e) {
-			// $('#imagePreview').attr('src', e.target.result).show();
-			// set as background image for the image preview
-			$('#imagePreview')
-				.css('background-image', 'url(' + e.target.result + ')')
-				.show();
-			$('#uploadText').hide();
-			$('#ResponseArea').hide();
-		};
-		reader.readAsDataURL(e.target.files[0]);
+		// Check if any file is selected
+		if (e.target.files.length > 0) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				// Set as background image for the image preview
+				$('#imagePreview')
+					.css('background-image', 'url(' + e.target.result + ')')
+					.show();
+				$('#uploadText').hide();
+				$('#ResponseArea').hide();
+			};
+			reader.readAsDataURL(e.target.files[0]);
+			$('#btnUpload').prop('disabled', false); // Enable upload button if file is selected
+		} else {
+			$('#btnUpload').prop('disabled', true); // Disable upload button if no file is selected
+		}
 	});
 
 	$('#btnUpload').click(function () {

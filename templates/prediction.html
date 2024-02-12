@@ -83,9 +83,25 @@
 								</div>
 							</div>
 						</div>
-						<div class="tab tab--right" onclick="redirect('user-profile')">
-							❤️️
+						<div class="tab tab--right" onclick="togglePopup()">
+							<img src="/static/main/profile.svg" alt="Profile" />
 							<span>Profile</span>
+							<div
+								id="profile-popup"
+								class="profile-popup"
+								style="display: none">
+								<ul>
+									<li onclick="redirect('history')">
+										History <img src="/static/main/history.svg" alt="history" />
+									</li>
+									<li onclick="redirect('user-profile')">
+										Likes <img src="/static/main/likes.svg" alt="likes" />
+									</li>
+									<li onclick="redirect('logout')">
+										Logout <img src="/static/main/logout.svg" alt="logout" />
+									</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -95,6 +111,22 @@
 							? (window.location.href = `/${page}`)
 							: window.location.replace(`/${page}`);
 					}
+					function togglePopup() {
+						var popup = document.getElementById('profile-popup');
+						if (popup.style.display === 'none') {
+							popup.style.display = 'block';
+						} else {
+							popup.style.display = 'none';
+						}
+					}
+
+					// Optional: Close the popup when clicking outside of it
+					window.onclick = function (event) {
+						var popup = document.getElementById('profile-popup');
+						if (!event.target.matches('.tab--right, .tab--right *')) {
+							popup.style.display = 'none';
+						}
+					};
 				</script>
 			</div>
 		</div>

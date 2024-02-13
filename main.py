@@ -27,24 +27,25 @@ user_ratings_collection = db['user_ratings']
 def process(image_path):
     # get books and ratings from user
     user_id = session['user_id']
-    # Query the collection for documents where `user_id` matches the provided value
-    # print('user_id:', user_id)
-    # find user data
-    user_data = users_collection.find_one({'_id': ObjectId(user_id)})
-    user_data_json = json.loads(dumps(user_data))
-    # print("user data:", user_data_json)
-
-    # Convert the query result to a list and then serialize to JSON
-    user_name = user_data_json['username']
-    # print(user_name)
 
     user_ratings = user_ratings_collection.find({'user_id': user_id})
     user_ratings_json = dumps(list(user_ratings))
 
-    # print(user_ratings_json)
-
     # Deserialize JSON string back to Python list of dictionaries
     user_ratings_data = json.loads(user_ratings_json)
+
+    # get the user's search history
+    user_requests = search_history_collection.find({'user_id': user_id})
+    user_requests_json = dumps(list(user_requests))
+
+    # remove the image_base64 from the user_requests
+    user_requests_data = json.loads(user_requests_json)
+    for req_element in user_requests_data:
+        req_element.pop('image_base64', None)
+        req_element.pop('_id', None)
+        req_element.pop('user_id', None)
+        req_element.pop('timestamp', None)
+    # print('previous user requests:', user_requests_data)
 
     # Function to extract book titles and ratings
     def get_titles_and_ratings(books):
@@ -64,16 +65,17 @@ def process(image_path):
         "model": "gpt-4-vision-preview",
         "messages": [
             # Example of a previous user message
-            {"role": "user", "content": f"these are my books and their ratings {titles_and_ratings}"},
-            # Assuming you can structure an image upload or reference in a compatible way
+            {
+                "role": "user",
+                "content": f"these are my books and their ratings {titles_and_ratings} along with my search history {user_requests_data}"},
             {
                 "role": "user",
                 "content": [
                     {
                         "type": "text",
                         "text": f"can you get the titles of the books in this image? Based on the user's previous "
-                                f"ratings, give the new book(s) a rating from 1-5. The user is named {user_name}. "
-                                f"Provide reasons the user would like the books in less than 2 sentences. Return in "
+                                f"ratings and search history, give the new book(s) a rating from 1-5."
+                                f"Provide reasons the user would like the books in less than 2 sentences, Address the user directly. Return in "
                                 f"JSON, with these fields: 'book_title', 'predicted_rating', 'reason'. Give no other "
                                 f"text.",
                     },

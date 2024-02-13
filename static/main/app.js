@@ -135,17 +135,11 @@ $(document).ready(function () {
 		});
 	}
 });
-// on document load
-document.addEventListener('DOMContentLoaded', function () {
-	//clear upload input
-	$('#fileInput').val('');
-});
 
-adjustMainTabBehavior();
 // Function to check if the current page is 'main'
 function isCurrentPageMain() {
 	return (
-		window.location.pathname.endsWith('/templates/prediction.html') ||
+		window.location.pathname.endsWith('/main') ||
 		window.location.pathname === '/'
 	);
 }
@@ -207,7 +201,7 @@ document.getElementById('fileInput').addEventListener('change', function () {
 function redirect(page) {
 	//if current page is the same as the page to redirect to, do nothing
 	if (
-		window.location.pathname === `/templates/prediction.html` &&
+		window.location.pathname === `/main` &&
 		page === 'main'
 	) {
 		return;
@@ -229,3 +223,11 @@ window.onclick = function (event) {
 		popup.style.display = 'none';
 	}
 };
+
+
+// on document load
+document.addEventListener('DOMContentLoaded', function () {
+	//clear upload input
+	$('#fileInput').val('');
+	adjustMainTabBehavior();
+});

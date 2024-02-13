@@ -60,12 +60,14 @@ document.addEventListener('DOMContentLoaded', function () {
 	fetch('/search-history')
 		.then((response) => response.json())
 		.then((searches) => {
+			searches.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 			Swal.close();
 			var resultsHTML = '';
 			searches.forEach((search) => {
 				let bookTitle, predictedRating, reason;
 				try {
 					// Attempt to parse the openai_response if it's a string
+					console.log(search.openai_response);
 					const openaiResponse =
 						typeof search.openai_response === 'string'
 							? JSON.parse(search.openai_response)

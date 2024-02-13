@@ -28,20 +28,20 @@ def process(image_path):
     # get books and ratings from user
     user_id = session['user_id']
     # Query the collection for documents where `user_id` matches the provided value
-    print('user_id:', user_id)
+    # print('user_id:', user_id)
     # find user data
     user_data = users_collection.find_one({'_id': ObjectId(user_id)})
     user_data_json = json.loads(dumps(user_data))
-    print("user data:", user_data_json)
+    # print("user data:", user_data_json)
 
     # Convert the query result to a list and then serialize to JSON
     user_name = user_data_json['username']
-    print(user_name)
+    # print(user_name)
 
     user_ratings = user_ratings_collection.find({'user_id': user_id})
     user_ratings_json = dumps(list(user_ratings))
 
-    print(user_ratings_json)
+    # print(user_ratings_json)
 
     # Deserialize JSON string back to Python list of dictionaries
     user_ratings_data = json.loads(user_ratings_json)
@@ -91,23 +91,29 @@ def process(image_path):
 
     # create response from payload
     response = openai.ChatCompletion.create(**payload)
-    print(response.choices[0].message['content'])
 
     # mongo
     base64_image = f"data:image/jpeg;base64,{base64_image}"
     # Assume the rest of your process function is here and generates a `response`
+
+    openai_response = response.choices[0].message['content']
+
+    # Remove backticks from the response if present
+    cleaned_response = openai_response.replace("```", "").strip()
+
+    cleaned_response = cleaned_response.replace("json", "")
 
     # Now, save to MongoDB
     request_document = {
         "user_id": user_id,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "image_base64": base64_image,
-        "openai_response": response.choices[0].message['content'],
+        "openai_response": cleaned_response,
     }
 
     search_history_collection.insert_one(request_document)
 
-    return response.choices[0].message['content']
+    return cleaned_response
 
 
 app = Flask(__name__)
@@ -200,18 +206,6 @@ def search_books():
     return render_template('search.html')
 
 
-# @app.route('/get-user-data', methods=['GET'])
-# def get_user_data():
-#     # Convert user_id to the correct type if necessary (e.g., int or string)
-#     user_id = session.get('user_id')
-#     user_id_query = int(user_id) if user_id.isdigit() else user_id
-#
-#     # Query the collection for documents where `user_id` matches the provided value
-#     user_requests = search_history_collection.find({'user_id': user_id_query})
-#
-#     return dumps(list(user_requests))
-
-
 @app.route('/history')
 def history():
     if 'user_id' not in session:
@@ -252,20 +246,10 @@ def upload_image():
     file = request.files['file']
 
     response = process(file)
-    # Remove backticks from the response if present
-    cleaned_response = response.replace("```", "").strip()
 
-    cleaned_response = cleaned_response.replace("json", "")
+    print(response)
 
-    print(cleaned_response)
-
-    try:
-        response_dict = json.loads(cleaned_response)
-    except json.JSONDecodeError as e:
-        print(f"JSON decoding error: {e}")
-        return jsonify({'error': 'Error parsing the process response'})
-
-    return jsonify({'response': response_dict})
+    return jsonify({'response': response})
 
 
 @app.route('/search', methods=['GET'])

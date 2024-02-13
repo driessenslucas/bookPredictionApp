@@ -76,7 +76,7 @@
 							<img src="/static/main/search.svg" alt="Search" />
 							<span>Search</span>
 						</div>
-						<div class="tab tab--fab" onclick="redirect('main')">
+						<div class="tab tab--fab main-tab" onclick="redirect('main')">
 							<div class="top">
 								<div class="fab">
 									<img src="/static/main/camera.svg" alt="Add" />
@@ -105,29 +105,7 @@
 						</div>
 					</div>
 				</div>
-				<script>
-					function redirect(page) {
-						window.location
-							? (window.location.href = `/${page}`)
-							: window.location.replace(`/${page}`);
-					}
-					function togglePopup() {
-						var popup = document.getElementById('profile-popup');
-						if (popup.style.display === 'none') {
-							popup.style.display = 'block';
-						} else {
-							popup.style.display = 'none';
-						}
-					}
-
-					// Optional: Close the popup when clicking outside of it
-					window.onclick = function (event) {
-						var popup = document.getElementById('profile-popup');
-						if (!event.target.matches('.tab--right, .tab--right *')) {
-							popup.style.display = 'none';
-						}
-					};
-				</script>
+				<script></script>
 			</div>
 		</div>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

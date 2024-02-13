@@ -75,23 +75,43 @@ $(document).ready(function () {
 			error: function () {
 				Swal.close();
 				//show in sweet alert
+
+				//ask user if they want to upload again or upload another image
 				Swal.fire({
 					heightAuto: false,
-					title: 'Error processing the request',
-					icon: 'error',
-					showCancelButton: false,
-					showConfirmButton: true,
+					title: 'Error processing!! do you want to try again?',
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonText: 'Yes',
+					cancelButtonText: 'No',
+				}).then((result) => {
+					if (result.isConfirmed) {
+						//click the upload button
+						document.querySelector('#btnUpload').click();
+					} else {
+						//redirect to the main page
+						redirect('main');
+					}
 				});
-				// $('#responseArea')
-				// 	.html(
-				// 		"<div class='alert alert-danger'>Error processing the request.</div>"
-				// 	)
-				// 	.show();
+
+				// Swal.fire({
+				// 	heightAuto: false,
+				// 	title: 'Error processing the request',
+				// 	icon: 'error',
+				// 	showCancelButton: false,
+				// 	showConfirmButton: true,
+				// }).then(() => {
+
+				// });
 			},
 		});
 	});
 
 	function displayResponse(data) {
+		//parse json
+		data = JSON.parse(data);
+		console.log(data);
+
 		//show in sweet alert
 		Swal.fire({
 			heightAuto: false,
@@ -120,3 +140,92 @@ document.addEventListener('DOMContentLoaded', function () {
 	//clear upload input
 	$('#fileInput').val('');
 });
+
+adjustMainTabBehavior();
+// Function to check if the current page is 'main'
+function isCurrentPageMain() {
+	return (
+		window.location.pathname.endsWith('/templates/prediction.html') ||
+		window.location.pathname === '/'
+	);
+}
+
+// Function to change the tab image and behavior
+function adjustMainTabBehavior() {
+	var mainTab = document.querySelector('.main-tab');
+	var fileInput = document.getElementById('fileInput');
+
+	if (isCurrentPageMain()) {
+		// Change the image source
+		mainTab.querySelector('img').src = '/static/main/upload.svg'; // Update the path as needed
+
+		// Adjust behavior to act like the upload button
+		mainTab.onclick = function () {
+			fileInput.click();
+		};
+	} else {
+		// Reset to default behavior if not on the 'main' page
+		mainTab.onclick = function () {
+			redirect('main');
+		};
+	}
+}
+
+// Function to handle file input changes
+document.getElementById('fileInput').addEventListener('change', function () {
+	// Handle file selection...
+	console.log('File selected');
+	//sweet alert for confirmation
+	Swal.fire({
+		title: 'Are you sure?',
+		text: 'You are about to upload an image',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, upload it!',
+	})
+		.then((result) => {
+			if (result.isConfirmed) {
+				//click confirm button
+				document.querySelector('#btnUpload').click();
+				// change the maintab to display a confirm button and make it click the upload button
+				var mainTab = document.querySelector('.main-tab');
+				mainTab.querySelector('img').src = '/static/main/confirm.svg'; // Update the path as needed
+
+				mainTab.onclick = function () {
+					document.querySelector('#btnUpload').click();
+				};
+			}
+		})
+		.then(() => {
+			//reset the main tab
+			adjustMainTabBehavior();
+		});
+});
+// Existing functions...
+function redirect(page) {
+	//if current page is the same as the page to redirect to, do nothing
+	if (
+		window.location.pathname === `/templates/prediction.html` &&
+		page === 'main'
+	) {
+		return;
+	} else {
+		window.location
+			? (window.location.href = `/${page}`)
+			: window.location.replace(`/${page}`);
+	}
+}
+
+function togglePopup() {
+	var popup = document.getElementById('profile-popup');
+	popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+}
+
+window.onclick = function (event) {
+	var popup = document.getElementById('profile-popup');
+	if (!event.target.matches('.tab--right, .tab--right *')) {
+		popup.style.display = 'none';
+	}
+};

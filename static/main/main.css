@@ -42,6 +42,7 @@ body {
 }
 #uploadForm {
 	order: 2;
+	display: none;
 }
 #fileInput {
 	display: none; /* Hide the file input */

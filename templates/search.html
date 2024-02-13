@@ -9,6 +9,7 @@
 		<link
 			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 			rel="stylesheet" />
+		<link rel="stylesheet" href="@sweetalert2/theme-dark/dark.css" />
 		<link rel="stylesheet" href="/static/main/app.css" />
 		<link rel="stylesheet" href="/static/search/main.css" />
 	</head>
@@ -55,9 +56,27 @@
 		</div>
 		<script>
 			function redirect(page) {
-				window.location
-					? (window.location.href = `/${page}`)
-					: window.location.replace(`/${page}`);
+				//if logout, popup a confirmation
+				if (page === 'logout') {
+					Swal.fire({
+						title: 'Are you sure?',
+						text: 'You will be logged out',
+						icon: 'warning',
+						showCancelButton: true,
+						confirmButtonColor: '#3085d6',
+						cancelButtonColor: '#d33',
+						confirmButtonText: 'Yes, log me out!',
+					}).then((result) => {
+						if (result.isConfirmed) {
+							window.location.replace('/logout');
+						}
+					});
+					return;
+				} else {
+					window.location
+						? (window.location.href = `/${page}`)
+						: window.location.replace(`/${page}`);
+				}
 			}
 			function togglePopup() {
 				var popup = document.getElementById('profile-popup');

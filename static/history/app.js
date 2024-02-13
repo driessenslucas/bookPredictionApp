@@ -110,3 +110,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.error('Error fetching search history:', error);
 		});
 });
+if (
+	window.matchMedia &&
+	window.matchMedia('(prefers-color-scheme: dark)').matches
+) {
+	document.body.setAttribute('data-theme', 'dark');
+}

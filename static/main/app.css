@@ -1,3 +1,32 @@
+:root {
+	/* Light theme colors */
+	--background-color: #f7f7f7;
+	--text-color: #000000;
+	--container-background-color: #ffffff;
+	--button-background-color: #f0f0f0;
+	--button-hover-background-color: #0056b3;
+	--sidebar-background-color: #343a40;
+	--sidebar-text-color: #ffffff;
+	--shadow-color: rgba(0, 0, 0, 0.2);
+	--border-top-color: rgba(167, 161, 161, 0.69);
+	--border-shadow-color: rgba(23, 23, 23, 0.28);
+	--EEE: #eee;
+}
+
+[data-theme='dark'] {
+	/* Dark theme colors */
+	--background-color: #121212;
+	--text-color: #ffffff;
+	--container-background-color: #242424;
+	--button-background-color: #343a40;
+	--button-hover-background-color: #495057;
+	--sidebar-background-color: #1c1e22;
+	--sidebar-text-color: #ffffff;
+	--shadow-color: rgba(255, 255, 255, 0.2);
+	--border-top-color: rgba(167, 161, 161, 0.69); /* change Lighter color */
+	--border-shadow-color: rgba(23, 23, 23, 0.28);
+}
+
 .wrapper {
 	max-width: 400px;
 	margin: 0px auto;
@@ -35,28 +64,28 @@
 	height: 100%;
 }
 .bottom-appbar .tabs .tab {
-	background-color: #fff;
+	background-color: var(--container-background-color);
 	width: 33.4%;
 	height: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	border-top: 1px solid #eee;
+	border-top: 1px solid var(--EEE);
 	box-shadow: 1x 1x 3px #ccc, -1px -1px 3px #ccc;
 	font-size: 24px;
 }
 .bottom-appbar .tabs .tab--left {
 	width: 100%;
 	border-top-right-radius: 30px;
-	border-top: 1px solid rgba(167, 161, 161, 0.69);
-	box-shadow: 0px 6px 7px 0px rgba(23, 23, 23, 0.28);
+	border-top: 1px solid var(--border-top-color);
+	box-shadow: 0px 6px 7px 0px var(--border-shadow-color);
 }
 .bottom-appbar .tabs .tab--right {
 	width: 100%;
 	border-top-left-radius: 30px;
-	border-top: 1px solid rgba(167, 161, 161, 0.69);
-	box-shadow: 15px 4px 15px 0px rgba(23, 23, 23, 0.28);
+	border-top: 1px solid var(--border-top-color);
+	box-shadow: 15px 4px 15px 0px var(--border-shadow-color);
 }
 .bottom-appbar .tabs .tab--fab {
 	width: 180px;
@@ -71,8 +100,8 @@
 	border-bottom-left-radius: 100px;
 	border-bottom-right-radius: 100px;
 	background-color: transparent;
-	box-shadow: 0px 30px 0px 25px #fff;
-	border-bottom: 1px solid rgba(167, 161, 161, 0.69);
+	box-shadow: 0px 30px 0px 25px var(--container-background-color);
+	border-bottom: 1px solid var(--border-top-color);
 	display: flex;
 }
 .bottom-appbar .tabs .tab span {
@@ -82,11 +111,11 @@
 	font-size: 24px;
 }
 .bottom-appbar .tabs .tab.is-active {
-	color: #0056b3;
+	/* color: var(--button-hover-background-color); */
 }
 .bottom-appbar .tabs .fab {
 	border-radius: 50%;
-	background-color: #0056b3;
+	background-color: var(--button-hover-background-color);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -94,7 +123,7 @@
 	height: 70px;
 	font-weight: bold;
 	font-size: 22px;
-	color: #fff;
+	color: var(--container-background-color);
 	position: relative;
 	justify-content: center;
 	transform: translate(2px, -60%);
@@ -103,8 +132,8 @@
 	position: absolute;
 	bottom: 74px; /* Height of the bottom bar */
 	right: 10px; /* Adjust based on your layout */
-	background-color: #fff;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	background-color: var(--container-background-color);
+	box-shadow: 0 2px 5px var(--shadow-color);
 	border-radius: 5px;
 	z-index: 9999;
 }
@@ -118,11 +147,12 @@
 
 .profile-popup ul li {
 	padding: 4px;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--EEE);
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
 	z-index: 9999;
+	color: var(--text-color);
 }
 
 .profile-popup ul li:last-child {
@@ -134,4 +164,24 @@
 	background-color: #f5f5f5;
 	cursor: pointer;
 	z-index: 9999;
+}
+
+img[src$='.svg'] {
+	color: var(--text-color);
+	filter: invert(0.1) sepia(1) saturate(5) hue-rotate(175deg);
+}
+
+.swal2-modal {
+	color: var(--text-color);
+	background: var(--background-color) !important;
+}
+.swal_text_box {
+	padding: 1em;
+	background-color: var(--container-background-color);
+	color: var(--text-color);
+	border-radius: 5px;
+	margin-top: 1em;
+}
+.custom-swal {
+	margin-bottom: 60px;
 }

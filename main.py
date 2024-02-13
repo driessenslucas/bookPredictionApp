@@ -67,14 +67,14 @@ def process(image_path):
             # Example of a previous user message
             {
                 "role": "user",
-                "content": f"these are my books and their ratings {titles_and_ratings} along with my search history {user_requests_data}"},
+                "content": f"these are my books and their ratings {titles_and_ratings}"},
             {
                 "role": "user",
                 "content": [
                     {
                         "type": "text",
                         "text": f"can you get the titles of the books in this image? Based on the user's previous "
-                                f"ratings and search history, give the new book(s) a rating from 1-5."
+                                f"ratings, give the new book(s) a rating from 1-5. before rating, check if it has been rated before in the user's history. {user_requests_data}"
                                 f"Provide reasons the user would like the books in less than 2 sentences, Address the user directly. Return in "
                                 f"JSON, with these fields: 'book_title', 'predicted_rating', 'reason'. Give no other "
                                 f"text.",

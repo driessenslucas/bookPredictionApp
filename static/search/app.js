@@ -125,3 +125,9 @@ document.getElementById('searchQuery').addEventListener('keyup', function (e) {
 		document.getElementById('searchButton').click();
 	}
 });
+if (
+	window.matchMedia &&
+	window.matchMedia('(prefers-color-scheme: dark)').matches
+) {
+	document.body.setAttribute('data-theme', 'dark');
+}

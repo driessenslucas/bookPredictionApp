@@ -1,5 +1,30 @@
+:root {
+	/* Light theme colors */
+	--background-color: #f7f7f7;
+	--text-color: #000000;
+	--container-background-color: #ffffff;
+	--button-background-color: #f0f0f0;
+	--button-hover-background-color: #0056b3;
+	--sidebar-background-color: #343a40;
+	--sidebar-text-color: #ffffff;
+	--shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] {
+	/* Dark theme colors */
+	--background-color: #121212;
+	--text-color: #ffffff;
+	--container-background-color: #242424;
+	--button-background-color: #343a40;
+	--button-hover-background-color: #495057;
+	--sidebar-background-color: #1c1e22;
+	--sidebar-text-color: #ffffff;
+	--shadow-color: rgba(255, 255, 255, 0.2);
+}
+
 body {
-	background-color: #f7f7f7; /* Light grey background */
+	background-color: var(--background-color);
+	color: var(--text-color);
 	font-family: 'Arial', sans-serif; /* Modern font */
 	overflow: hidden;
 	width: 566px;
@@ -165,16 +190,6 @@ body {
 		margin-left: 0;
 	}
 }
-body {
-	background-color: #f7f7f7;
-	font-family: 'Arial', sans-serif;
-	overflow: hidden;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	margin: 0 auto;
-}
 
 .main-content {
 	padding-top: 20px;
@@ -259,4 +274,57 @@ body {
 	#imagePreview {
 		max-height: 715px; /* Smaller image preview on very small screens */
 	}
+}
+
+body {
+	background-color: var(--background-color);
+	color: var(--text-color);
+}
+
+.main-content,
+.container,
+#responseArea .alert,
+.alert,
+#imagePreview {
+	background-color: var(--container-background-color);
+}
+
+.image-preview,
+.spinner-border,
+#imagePreview {
+	box-shadow: 0 0 8px var(--shadow-color);
+}
+
+#btnUpload,
+.sidebar-menu li a {
+	background-color: var(--button-background-color);
+	color: var(--sidebar-text-color);
+}
+
+#btnUpload:hover,
+.sidebar-menu li a:hover {
+	background-color: var(--button-hover-background-color);
+}
+
+.sidebar {
+	background-color: var(--sidebar-background-color);
+	color: var(--sidebar-text-color);
+}
+
+/* Additional elements and their hover states */
+input,
+textarea,
+select {
+	background-color: var(--container-background-color);
+	color: var(--text-color);
+	border: 1px solid var(--shadow-color);
+}
+
+input:hover,
+textarea:hover,
+select:hover,
+input:focus,
+textarea:focus,
+select:focus {
+	border-color: var(--button-hover-background-color);
 }

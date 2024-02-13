@@ -107,9 +107,9 @@ $(document).ready(function () {
 			heightAuto: false,
 			title: `<strong>Predicted Rating: ${data.predicted_rating}</strong>`,
 			html: `
-	<div style="padding: 1em; background-color: #f7f7f7; border-radius: 5px; margin-to
-	<p style="margin: 0; font-weight: bold;">${data.book_title}</p>
-	<p style="margin: 0;">Reason: ${data.reason}</p>
+	<div class="swal_text_box">
+	<p style="margin: 0; font-weight: bold;">Book: ${data.book_title}</p>
+	<p style="margin: 0;">${data.reason}</p>
 	</div>
 	`,
 			icon: 'success',
@@ -192,6 +192,21 @@ function redirect(page) {
 	//if current page is the same as the page to redirect to, do nothing
 	if (window.location.pathname === `/main` && page === 'main') {
 		return;
+	} else if (page === 'logout') {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: 'You will be logged out',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, log me out!',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				window.location.replace('/logout');
+			}
+		});
+		return;
 	} else {
 		window.location
 			? (window.location.href = `/${page}`)
@@ -213,6 +228,12 @@ window.onclick = function (event) {
 
 // on document load
 document.addEventListener('DOMContentLoaded', function () {
+	if (
+		window.matchMedia &&
+		window.matchMedia('(prefers-color-scheme: dark)').matches
+	) {
+		document.body.setAttribute('data-theme', 'dark');
+	}
 	//clear upload input
 	$('#fileInput').val('');
 	adjustMainTabBehavior();

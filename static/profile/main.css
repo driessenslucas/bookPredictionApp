@@ -1,5 +1,32 @@
+:root {
+	/* Light theme variables (already existing ones can be reused) */
+	--text-color-main: #333; /* Main text color */
+	--text-color-secondary: #666; /* Secondary text color */
+	--background-color: #fff; /* Background color */
+	--book-cover-shadow: rgba(0, 0, 0, 0.1); /* Shadow for book cover */
+	--book-rating-color: #007bff; /* Color for the book rating */
+}
+
+[data-theme='dark'] {
+	/* Dark theme variables */
+	--text-color-main: #ccc; /* Lighter text color for better readability */
+	--text-color-secondary: #999; /* Secondary text color for dark mode */
+	--background-color: #242424; /* Dark mode background color */
+	--dark-black: #000; /* Black color for dark mode */
+	--book-cover-shadow: rgba(
+		255,
+		255,
+		255,
+		0.1
+	); /* Lighter shadow for book cover in dark mode */
+	--book-rating-color: #1e90ff; /* Adjusted color for book rating in dark mode */
+}
 body {
+	color: var(--text-color-main); /* Main text color */
 	font-family: Arial, sans-serif;
+	background-color: var(
+		--background-color
+	); /* Use the background color variable */
 }
 
 .book {
@@ -13,29 +40,33 @@ body {
 	height: 150px;
 	object-fit: cover;
 	margin-right: 20px;
+	box-shadow: 0 4px 8px var(--book-cover-shadow); /* Use variable for shadow */
 }
 
-.book-info h2 {
+.book-info h2,
+.book-title {
 	margin: 0;
-	color: #333;
+	color: var(--text-color-main); /* Main text color */
 }
 
-.book-info p {
-	color: #666;
+.book-info p,
+.book-author {
+	color: var(--text-color-secondary); /* Secondary text color */
 }
+
 .book-card {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	background: #fff;
+	background: var(----dark-black); /* Background color */
 	border-radius: 0.5rem;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	box-shadow: 4px 4px 24px var(--book-cover-shadow);
 	overflow: hidden;
 	margin-bottom: 1rem;
 }
 
 .book-cover {
-	width: 120px; /* larger cover image */
+	width: 120px;
 	height: auto;
 	object-fit: cover;
 }
@@ -47,20 +78,18 @@ body {
 
 .book-title {
 	font-size: 1.25rem;
-	color: #333;
 	margin-bottom: 0.25rem;
 }
 
 .book-author {
-	color: #555;
 	margin-bottom: 0.5rem;
 }
 
 .book-rating {
 	font-weight: bold;
-	color: #007bff; /* Bootstrap primary color */
+	color: var(--book-rating-color); /* Color for book rating */
 }
-.book-container{
+
+.book-container {
 	margin-bottom: 100px;
 }
-/* Adjust the bottom navigation bar as needed */

@@ -93,16 +93,6 @@ $(document).ready(function () {
 						redirect('main');
 					}
 				});
-
-				// Swal.fire({
-				// 	heightAuto: false,
-				// 	title: 'Error processing the request',
-				// 	icon: 'error',
-				// 	showCancelButton: false,
-				// 	showConfirmButton: true,
-				// }).then(() => {
-
-				// });
 			},
 		});
 	});
@@ -200,10 +190,7 @@ document.getElementById('fileInput').addEventListener('change', function () {
 // Existing functions...
 function redirect(page) {
 	//if current page is the same as the page to redirect to, do nothing
-	if (
-		window.location.pathname === `/main` &&
-		page === 'main'
-	) {
+	if (window.location.pathname === `/main` && page === 'main') {
 		return;
 	} else {
 		window.location
@@ -223,7 +210,6 @@ window.onclick = function (event) {
 		popup.style.display = 'none';
 	}
 };
-
 
 // on document load
 document.addEventListener('DOMContentLoaded', function () {

@@ -21,7 +21,9 @@ document.getElementById('searchButton').addEventListener('click', function () {
 			var resultsHTML = '';
 			books.forEach((book) => {
 				resultsHTML += `
-        <div class="book">
+        <div class="book ${book.isbn}" data-isbn="${book.isbn}" data-title="${
+					book.title
+				}" data-authors="${book.authors.join(',')}">
             <img src="${book.thumbnail}" alt="${book.title}" class="book-cover">
             <div class="book-details">
                 <h3>${book.title}</h3>
@@ -37,9 +39,9 @@ document.getElementById('searchButton').addEventListener('click', function () {
                     <input type="number" min="1" max="5" placeholder="Rate 1-5" id="rating-${
 											book.isbn
 										}">
-                    <button onclick="rateBook('${book.isbn}','${
-					book.title
-				}')">Submit Rating</button>
+                    <button onclick="rateBook('${
+											book.isbn
+										}')">Submit Rating</button>
                 </div>
                 <a href="${
 									book.infoLink
@@ -62,10 +64,28 @@ document.getElementById('searchButton').addEventListener('click', function () {
 		});
 });
 
-function rateBook(bookId, bookTitle) {
+function rateBook(bookId) {
 	console.log('Rating book with ID: ' + bookId);
-	var rating = document.getElementById('rating-' + bookId).value;
-	var data = { isbn: bookId, title: bookTitle, rating: rating };
+
+	var bookElement = document.getElementsByClassName(bookId)[0];
+	//make a book and get the title, authors from data attributes
+	var book = {
+		isbn: bookElement.dataset.isbn,
+		title: bookElement.dataset.title,
+		authors: bookElement.dataset.authors.split(','),
+		thumbnail: bookElement.querySelector('img').getAttribute('src'),
+	};
+
+	console.log(book);
+
+	var rating = document.getElementById('rating-' + book.isbn).value;
+	var data = {
+		isbn: book.isbn,
+		title: book.title,
+		authors: book.authors,
+		thumbnail: book.thumbnail,
+		rating: rating,
+	};
 	fetch('/rate', {
 		method: 'POST',
 		headers: {
@@ -105,11 +125,3 @@ document.getElementById('searchQuery').addEventListener('keyup', function (e) {
 		document.getElementById('searchButton').click();
 	}
 });
-
-// document.addEventListener('DOMContentLoaded', (event) => {
-// 	const bottomAppBarHeight =
-// 		document.querySelector('.bottom-appbar').offsetHeight;
-
-// 	const searchbar = document.querySelector('.c-searchbar');
-// 	searchbar.style.bottom = `${110}px`;
-// });

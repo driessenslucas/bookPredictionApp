@@ -30,6 +30,19 @@
 //             console.error('Error loading search history:', error)
 //         );
 // };
+// function formatTimestamp(timestamp) {
+// 	const options = {
+// 		year: 'numeric',
+// 		month: 'long',
+// 		day: 'numeric',
+// 		hour: '2-digit',
+// 		minute: '2-digit',
+// 		hour12: true,
+// 	};
+// 	const date = new Date(timestamp);
+// 	return date.toLocaleDateString('en-US', options);
+// }
+
 function formatTimestamp(timestamp) {
 	const options = {
 		year: 'numeric',
@@ -39,9 +52,10 @@ function formatTimestamp(timestamp) {
 		minute: '2-digit',
 		hour12: true,
 	};
-	const date = new Date(timestamp);
-	return date.toLocaleDateString('en-US', options);
+	const date = moment(timestamp);
+	return date.format('MMMM Do YYYY, h:mm:ss a');
 }
+// add something to parse this string 2024-02-13T16:25:56.814025+00:00
 
 document.addEventListener('DOMContentLoaded', function () {
 	// Show the loading Swal
@@ -61,7 +75,10 @@ document.addEventListener('DOMContentLoaded', function () {
 		.then((response) => response.json())
 		.then((searches) => {
 			searches.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-			Swal.close();
+
+			setTimeout(() => {
+				Swal.close();
+			}, 500);
 			var resultsHTML = '';
 			searches.forEach((search) => {
 				let bookTitle, predictedRating, reason;

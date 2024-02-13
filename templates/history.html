@@ -2,40 +2,76 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Search History</title>
-		<!-- Add Bootstrap CSS for styling -->
 		<link
 			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 			rel="stylesheet" />
-		<!-- Additional CSS if needed -->
+		<link rel="stylesheet" href="/static/main/app.css" />
+		<link rel="stylesheet" href="/static/history/main.css" />
 	</head>
 	<body>
 		<div class="container">
 			<h1>Search History</h1>
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>Date</th>
-						<th>Book Title</th>
-						<th>Predicted Rating</th>
-						<th>Reason</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for record in search_history %}
-					<tr>
-						<td>{{ record.timestamp }}</td>
-						<td>{{ record.openai_response.book_title }}</td>
-						<td>{{ record.openai_response.predicted_rating }}</td>
-						<td>{{ record.openai_response.reason }}</td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+			<div id="searchHistory"></div>
 		</div>
-		<!-- Add Bootstrap JS and jQuery if you need them -->
+		<div class="bottom-appbar">
+			<div class="tabs">
+				<div class="tab is-active tab--left" onclick="redirect('search-books')">
+					<img src="/static/main/search.svg" alt="Search" />
+					<span>Search</span>
+				</div>
+				<div class="tab tab--fab" onclick="redirect('main')">
+					<div class="top">
+						<div class="fab">
+							<img src="/static/main/camera.svg" alt="Add" />
+						</div>
+					</div>
+				</div>
+				<div class="tab tab--right" onclick="togglePopup()">
+					<img src="/static/main/profile.svg" alt="Profile" />
+					<span>Profile</span>
+					<div id="profile-popup" class="profile-popup" style="display: none">
+						<ul>
+							<li onclick="redirect('history')">
+								History <img src="/static/main/history.svg" alt="history" />
+							</li>
+							<li onclick="redirect('user-profile')">
+								Likes <img src="/static/main/likes.svg" alt="likes" />
+							</li>
+							<li onclick="redirect('logout')">
+								Logout <img src="/static/main/logout.svg" alt="logout" />
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			function redirect(page) {
+				window.location
+					? (window.location.href = `/${page}`)
+					: window.location.replace(`/${page}`);
+			}
+			function togglePopup() {
+				var popup = document.getElementById('profile-popup');
+				if (popup.style.display === 'none') {
+					popup.style.display = 'block';
+				} else {
+					popup.style.display = 'none';
+				}
+			}
+
+			// Optional: Close the popup when clicking outside of it
+			window.onclick = function (event) {
+				var popup = document.getElementById('profile-popup');
+				if (!event.target.matches('.tab--right, .tab--right *')) {
+					popup.style.display = 'none';
+				}
+			};
+		</script>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="/static/history/app.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	</body>
 </html>

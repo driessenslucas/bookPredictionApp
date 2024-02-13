@@ -19,7 +19,7 @@ client = MongoClient('mongodb://mongo:27017/',
                      username=mongo_user,
                      password=mongo_pass)
 db = client['book_app']
-collection = db['user_requests']
+search_history_collection = db['user_requests']
 users_collection = db['users']
 user_ratings_collection = db['user_ratings']
 
@@ -105,7 +105,7 @@ def process(image_path):
         "openai_response": response.choices[0].message['content'],
     }
 
-    collection.insert_one(request_document)
+    search_history_collection.insert_one(request_document)
 
     return response.choices[0].message['content']
 
@@ -200,16 +200,16 @@ def search_books():
     return render_template('search.html')
 
 
-@app.route('/get-user-data', methods=['GET'])
-def get_user_data():
-    # Convert user_id to the correct type if necessary (e.g., int or string)
-    user_id = session.get('user_id')
-    user_id_query = int(user_id) if user_id.isdigit() else user_id
-
-    # Query the collection for documents where `user_id` matches the provided value
-    user_requests = collection.find({'user_id': user_id_query})
-
-    return dumps(list(user_requests))
+# @app.route('/get-user-data', methods=['GET'])
+# def get_user_data():
+#     # Convert user_id to the correct type if necessary (e.g., int or string)
+#     user_id = session.get('user_id')
+#     user_id_query = int(user_id) if user_id.isdigit() else user_id
+#
+#     # Query the collection for documents where `user_id` matches the provided value
+#     user_requests = search_history_collection.find({'user_id': user_id_query})
+#
+#     return dumps(list(user_requests))
 
 
 @app.route('/history')
@@ -217,6 +217,21 @@ def history():
     if 'user_id' not in session:
         return redirect(url_for('index'))
     return render_template('history.html')
+
+
+@app.route('/search-history')
+def search_history():
+    user_id = session.get('user_id')
+    user_id_query = int(user_id) if user_id.isdigit() else user_id
+
+    print('user_id:', user_id)
+
+    # Query the collection for documents where `user_id` matches the provided value
+    user_requests = search_history_collection.find({'user_id': user_id_query})
+
+    # print(dumps(list(user_requests)))
+    # Render the template with the search history data
+    return dumps(list(user_requests))
 
 
 @app.route('/get-user-ratings', methods=['GET'])

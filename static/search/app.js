@@ -24,11 +24,11 @@ document.getElementById('searchButton').addEventListener('click', function () {
         <div class="book">
             <img src="${book.thumbnail}" alt="${book.title}" class="book-cover">
             <div class="book-details">
-                <h4>${book.title}</h4>
-                <p>Author(s): ${book.authors.join(', ')}</p>
-                <p>Publisher: ${book.publisher}</p>
-                <p>ISBN: ${book.isbn}</p>
-                <p>Published Date: ${book.publishedDate}</p>
+                <h3>${book.title}</h3>
+                <p><b>Author(s):</b> ${book.authors.join(', ')}</p>
+                <p><b>Publisher:</b> ${book.publisher}</p>
+                <p><b>ISBN:</b> ${book.isbn}</p>
+                <p><b>Published Date:</b> ${book.publishedDate}</p>
                 <b>description:</b>
                 <div class="c-description"><p>${book.description}</p></div>
             </div>

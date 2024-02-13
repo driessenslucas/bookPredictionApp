@@ -60,5 +60,7 @@ body {
 	font-weight: bold;
 	color: #007bff; /* Bootstrap primary color */
 }
-
+.book-container{
+	margin-bottom: 100px;
+}
 /* Adjust the bottom navigation bar as needed */

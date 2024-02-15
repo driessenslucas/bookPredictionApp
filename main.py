@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, templating, session, url_for, redirect, render_template
+from flask import Flask, request, jsonify, templating, session, url_for, redirect, render_template, send_file
+from io import BytesIO
 import os
 import openai
 import base64
@@ -10,6 +11,7 @@ from langdetect import detect
 import requests
 import firebase_admin
 from firebase_admin import credentials,firestore
+import shutil # save img locally
 
 #get account key from os environment
 
@@ -20,7 +22,7 @@ firebase_admin.initialize_app(cred, {
 
 db = firestore.client()
 
-def process(image_path):
+def process_single_request(image_path):
     user_id = session['user_id']
 
     # Fetch user ratings from Firestore
@@ -61,7 +63,7 @@ def process(image_path):
                     {
                         "type": "text",
                         "text": f"can you get the titles of the books in this image? Based on the user's previous "
-                                f"ratings, give the new book(s) a rating from 1-5. before rating, check if it has been rated before in the user's history. {user_requests_data}"
+                                f"ratings, give the new book(s) a rating from 1-5. before rating be critical, check if it has been rated before in the user's history. {user_requests_data}"
                                 f"Provide reasons the user would like the books in less than 2 sentences, Address the user directly. Return in "
                                 f"JSON, with these fields: 'book_title', 'predicted_rating', 'reason'. Give no other "
                                 f"text.",
@@ -99,6 +101,44 @@ def process(image_path):
     db.collection('user_requests').add(request_document)
 
     return cleaned_response
+
+def process_books(image_path):
+    # OpenAI and image processing part remains unchanged
+    api_key = os.environ['OPENAI_API_KEY']
+    openai.api_key = api_key
+    base64_image = base64.b64encode(image_path.read()).decode('utf-8')
+    
+    payload = {
+    "model": "gpt-4-vision-preview",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "give all the titles of the books in the image, return in json format only, no other text. return these fields: title, author (and isbn if available.)"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{base64_image}"
+                    }
+                }
+            ]
+        }
+    ],
+    "max_tokens": 350,
+    }
+
+    response = openai.ChatCompletion.create(**payload)
+    openai_response = response.choices[0].message['content']
+    cleaned_response = openai_response.replace("```", "").strip().replace("json", "")
+
+    print(cleaned_response)
+    
+    return cleaned_response
+
+    
 
 app = Flask(__name__)
 # allow file uploads
@@ -224,18 +264,67 @@ def get_user_ratings():
     return jsonify(user_ratings_list)
 
 
-@app.route('/upload-image', methods=['POST'])
-def upload_image():
+@app.route('/upload-books', methods=['POST'])
+def upload_books():
     # check if the post request has the file part
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'})
     file = request.files['file']
 
-    response = process(file)
+    response = process_books(file)
 
     print(response)
 
     return jsonify({'response': response})
+
+
+@app.route('/upload-image', methods=['POST'])
+def upload_image():
+    
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'})
+    file = request.files['file']
+
+    response = process_single_request(file)
+
+    print(response)
+
+    return jsonify({'response': response})
+
+
+
+@app.route('/fetch-image', methods=['POST'])
+def fetch_image():
+    image_url = request.json['url']
+    response = requests.get(image_url, stream=True)
+
+    if response.status_code == 200:
+        base64_image = base64.b64encode(response.content).decode('utf-8')
+        return jsonify({'success': True, 'image': base64_image})
+    else:
+        return jsonify({'success': False, 'message': 'Failed to fetch image'})
+
+
+@app.route('/search-book', methods=['get'])
+def search_book():
+    query = request.args.get('query', '')
+    url = f'https://www.googleapis.com/books/v1/volumes?q={query}&langRestrict=en'
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Will raise an HTTPError for bad requests (4XX or 5XX)
+
+        # The response is already in JSON, so you can directly return it or process it as needed
+        books_data = response.json()
+        books = parse_google_books_response(books_data)
+
+        return jsonify(books[0])
+
+    except requests.exceptions.HTTPError as err:
+        return jsonify({'error': 'API request unsuccessful', 'details': str(err)})
+    except Exception as e:
+        return jsonify({'error': 'An error occurred', 'details': str(e)})
 
 
 @app.route('/search', methods=['GET'])
@@ -262,8 +351,9 @@ def search():
         return jsonify({'error': 'API request unsuccessful', 'details': str(err)}), 500
     except Exception as e:
         return jsonify({'error': 'An error occurred', 'details': str(e)}), 500
-
-
+    
+    
+    
 def detect_language(query):
     try:
         return detect(query)

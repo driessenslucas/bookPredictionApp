@@ -1,25 +1,3 @@
-$(document).ready(function () {
-	$('#sidebarCollapse').on('click', function () {
-		$('#sidebar').toggleClass('active');
-		$(this).toggleClass('active');
-
-		//if sidebar is active disable the main content
-		if ($('#sidebar').hasClass('active')) {
-			$('.main-content').css('pointer-events', 'none');
-			//make the main content look greyed out
-			$('.main-content').css('background-color', 'rgba(0, 0, 0, 0.5)');
-			$('.main-content').css('opacity', '0.5');
-			$('.container').css('background-color', 'rgba(0, 0, 0, 0.5)');
-			$('.container').css('opacity', '0.5');
-		} else {
-			$('.main-content').css('pointer-events', 'auto');
-			$('.main-content').css('background-color', 'rgba(0, 0, 0, 0)');
-			$('.main-content').css('opacity', '1');
-			$('.container').css('background-color', 'rgba(0, 0, 0, 0)');
-			$('.container').css('opacity', '1');
-		}
-	});
-});
 $('#imagePreview').click(function () {
 	$('#fileInput').click();
 });
@@ -48,83 +26,162 @@ $(document).ready(function () {
 	$('#btnUpload').click(function () {
 		$('#responseArea').hide();
 
-		Swal.fire({
-			heightAuto: false,
-			title: 'Processing the image...',
-			icon: 'info',
-			showCancelButton: false,
-			showConfirmButton: false,
-		});
+		// get upload type from main-content classlist
+		var uploadType = document
+			.querySelector('.main-content')
+			.classList.contains('single-book-upload')
+			? 'single'
+			: 'multiple';
 
-		Swal.showLoading();
-		var formData = new FormData();
-		formData.append('file', $('#fileInput')[0].files[0]);
+		if (uploadType == 'single') {
+			Swal.fire({
+				heightAuto: false,
+				title: 'Processing the image...',
+				icon: 'info',
+				showCancelButton: false,
+				showConfirmButton: false,
+			});
 
-		$.ajax({
-			url: '/upload-image',
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (data) {
-				Swal.close();
-				data = data.response;
-				console.log(data);
-				displayResponse(data);
-			},
-			error: function () {
-				Swal.close();
-				//show in sweet alert
+			Swal.showLoading();
+			var formData = new FormData();
+			formData.append('file', $('#fileInput')[0].files[0]);
 
-				//ask user if they want to upload again or upload another image
-				Swal.fire({
-					heightAuto: false,
-					title: 'Error processing!! do you want to try again?',
-					icon: 'question',
-					showCancelButton: true,
-					confirmButtonText: 'Yes',
-					cancelButtonText: 'No',
-				}).then((result) => {
-					if (result.isConfirmed) {
-						//click the upload button
-						document.querySelector('#btnUpload').click();
-					} else {
-						//redirect to the main page
-						redirect('main');
-					}
-				});
-			},
-		});
+			$.ajax({
+				url: '/upload-image',
+				type: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					Swal.close();
+					data = data.response;
+					console.log(data);
+					displayResponse(data);
+				},
+				error: function () {
+					Swal.close();
+					//show in sweet alert
+
+					//ask user if they want to upload again or upload another image
+					Swal.fire({
+						heightAuto: false,
+						title: 'Error processing!! do you want to try again?',
+						icon: 'question',
+						showCancelButton: true,
+						confirmButtonText: 'Yes',
+						cancelButtonText: 'No',
+					}).then((result) => {
+						if (result.isConfirmed) {
+							//click the upload button
+							document.querySelector('#btnUpload').click();
+						} else {
+							//close the sweet alert and clear the upload input
+							$('#fileInput').val('');
+							swal.close();
+							resetPage();
+						}
+					});
+				},
+			});
+		} else if (uploadType == 'multiple') {
+			Swal.fire({
+				heightAuto: false,
+				title: 'Processing the image...',
+				icon: 'info',
+				showCancelButton: false,
+				showConfirmButton: false,
+			});
+
+			Swal.showLoading();
+			var formData = new FormData();
+			formData.append('file', $('#fileInput')[0].files[0]);
+
+			$.ajax({
+				url: '/upload-books',
+				type: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					Swal.close();
+					data = data.response;
+					console.log(data);
+					displayRatedBooks(data);
+				},
+				error: function () {
+					Swal.close();
+					//show in sweet alert
+
+					Swal.fire({
+						heightAuto: false,
+						title: 'Error processing!! do you want to try again?',
+						icon: 'question',
+						showCancelButton: true,
+						confirmButtonText: 'Yes',
+						cancelButtonText: 'No',
+					}).then((result) => {
+						if (result.isConfirmed) {
+							//click the upload button
+							document.querySelector('#btnUpload').click();
+						} else {
+							//close the sweet alert and clear the upload input
+							$('#fileInput').val('');
+							swal.close();
+						}
+					});
+				},
+			});
+		}
 	});
+});
 
-	function displayResponse(data) {
-		//parse json
-		data = JSON.parse(data);
-		console.log(data);
+function displayResponse(data) {
+	//parse json
+	data = JSON.parse(data);
+	console.log(data);
 
-		//show in sweet alert
-		Swal.fire({
-			heightAuto: false,
-			title: `<strong>Predicted Rating: ${data.predicted_rating}</strong>`,
-			html: `
+	//show in sweet alert
+	Swal.fire({
+		heightAuto: false,
+		title: `<strong>Predicted Rating: ${data.predicted_rating}</strong>`,
+		html: `
 	<div class="swal_text_box">
 	<p style="margin: 0; font-weight: bold;">Book: ${data.book_title}</p>
 	<p style="margin: 0;">${data.reason}</p>
 	</div>
 	`,
-			icon: 'success',
-			showCancelButton: false,
-			showConfirmButton: true,
-			confirmButtonText: 'OK',
-			confirmButtonColor: '#3085d6', // Use a color that matches your site's theme.
-			cancelButtonColor: '#d33',
-			buttonsStyling: true,
-			customClass: {
-				popup: 'custom-swal',
-			},
-		});
-	}
-});
+		icon: 'success',
+		showCancelButton: false,
+		showConfirmButton: true,
+		confirmButtonText: 'OK',
+		confirmButtonColor: '#3085d6', // Use a color that matches your site's theme.
+		cancelButtonColor: '#d33',
+		buttonsStyling: true,
+		customClass: {
+			popup: 'custom-swal',
+		},
+	}).then((result) => {
+		//check if confirm button is clicked
+		if (result.isConfirmed) {
+			//check classlist of main-content
+			if (
+				document
+					.querySelector('.main-content')
+					.classList.contains('single-book-upload')
+			) {
+				// show the main-content
+				document.querySelector('.main-container').classList.remove('c-hidden');
+				//hide the rated books
+				document
+					.querySelector('.books-found-container')
+					.classList.add('c-hidden');
+			} else {
+				//reset the page
+				resetAfterMultipleUpload();
+			}
+		}
+	});
+}
 
 // Function to check if the current page is 'main'
 function isCurrentPageMain() {
@@ -161,6 +218,7 @@ document.getElementById('fileInput').addEventListener('change', function () {
 	console.log('File selected');
 	//sweet alert for confirmation
 	Swal.fire({
+		heightAuto: false,
 		title: 'Are you sure?',
 		text: 'You are about to upload an image',
 		icon: 'warning',
@@ -237,4 +295,228 @@ document.addEventListener('DOMContentLoaded', function () {
 	//clear upload input
 	$('#fileInput').val('');
 	adjustMainTabBehavior();
+	document.querySelector('.main-content').style.display = 'none'; // Assuming .main-content is your existing single book upload screen
 });
+
+document
+	.getElementById('singleBookUploadBtn')
+	.addEventListener('click', function () {
+		// Hide the choice screen and show the single book upload form
+		document.querySelector('.choice-screen').style.display = 'none';
+		document.querySelector('.main-content').style.display = 'block'; // Assuming .main-content is your existing single book upload screen
+		document.querySelector('.main-content').classList.add('single-book-upload'); // Assuming .main-content is your existing single book upload screen
+	});
+
+document
+	.getElementById('multipleBooksUploadBtn')
+	.addEventListener('click', function () {
+		// Hide the choice screen and show a new screen for multiple book uploads
+		document.querySelector('.choice-screen').style.display = 'none';
+		// You need to create a similar HTML structure for multiple book uploads
+		document.querySelector('.main-content').style.display = 'block';
+		document
+			.querySelector('.main-content')
+			.classList.add('multiple-book-upload'); // Assuming .main-content is your existing single book upload screen
+	});
+
+// Function to create book card HTML
+function createBookCard(rating) {
+	//parse the rating object
+	rating = rating[0];
+	console.log(rating);
+	console.log(rating.title);
+	return `
+    <div class="col-md-6">
+      <div class="book-card">
+				<img src="${rating.thumbnail || ''}" alt="${rating.title}" class="book-cover">
+        <div class="book-info">
+          <h2 class="book-title">${rating.title}</h2>
+          <p class="book-author">Author(s): ${rating.authors.join(', ')}</p>
+          <p class="book-rating">Your Rating: ${rating.rating}</p>
+          <button onclick="confirmSelection('${
+						rating.thumbnail
+					}')" class="btn btn-danger">choose</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Function to confirm deletion
+function confirmSelection(thumbnail) {
+	Swal.fire({
+		heightAuto: false,
+		title: 'Are you sure?',
+		text: '',
+		icon: 'question',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, I want to predict the rating!',
+	}).then((result) => {
+		if (result.isConfirmed) {
+			// show the main-content
+			document.querySelector('.main-container').classList.remove('c-hidden');
+			//hide the rated books
+			document
+				.querySelector('.books-found-container')
+				.classList.add('c-hidden');
+			//get the image of the book and put it in the upload fom
+			// $('#imagePreview').css('background-image', 'url(' + thumbnail + ')');
+			//clear file input
+			$('#fileInput').val('');
+			//fill the file input with the image
+			fetchImageServerSide(thumbnail);
+		}
+	});
+}
+
+function getFileFromBase64(string64, fileName) {
+	const trimmedString = string64.replace('dataimage/jpegbase64', '');
+	const imageContent = atob(trimmedString);
+	const buffer = new ArrayBuffer(imageContent.length);
+	const view = new Uint8Array(buffer);
+
+	for (let n = 0; n < imageContent.length; n++) {
+		view[n] = imageContent.charCodeAt(n);
+	}
+	const type = 'image/jpeg';
+	const blob = new Blob([buffer], { type });
+	return new File([blob], fileName, {
+		lastModified: new Date().getTime(),
+		type,
+	});
+}
+
+function fetchImageServerSide(imageUrl) {
+	fetch('/fetch-image', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ url: imageUrl }),
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			if (data.success) {
+				// Use the base64 image
+				var base64Image = data.image;
+				var imageUrl = `data:image/jpeg;base64,${base64Image}`;
+				$('#imagePreview').css('background-image', `url(${imageUrl})`).show();
+				$('#uploadText').hide();
+				// If you're using an <img> tag instead:
+				// document.getElementById('someImageElementId').src = imageUrl;
+
+				uploadImageFromBlob(getFileFromBase64(base64Image, 'filename.jpg'));
+			} else {
+				console.error('Error fetching image:', data.message);
+				// Handle failure
+			}
+		})
+		.catch((error) => console.error('Error:', error));
+}
+// Function to upload image from blob
+function uploadImageFromBlob(file) {
+	Swal.fire({
+		heightAuto: false,
+		title: 'Processing the image...',
+		icon: 'info',
+		showCancelButton: false,
+		showConfirmButton: false,
+	});
+
+	Swal.showLoading();
+	var formData = new FormData();
+
+	formData.append('file', file);
+
+	$.ajax({
+		url: '/upload-image',
+		type: 'POST',
+		data: formData,
+		processData: false,
+		contentType: false,
+		success: function (data) {
+			Swal.close();
+			data = data.response;
+			console.log(data);
+			displayResponse(data);
+		},
+		error: function () {
+			Swal.close();
+			Swal.fire({
+				heightAuto: false,
+				title: 'Error processing!! do you want to try again?',
+				icon: 'question',
+				showCancelButton: true,
+				confirmButtonText: 'Yes',
+				cancelButtonText: 'No',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					// hide the main content
+					document
+						.querySelector('.main-container')
+						.classList.remove('c-hidden');
+					//show the found books
+					document
+						.querySelector('.books-found-container')
+						.classList.add('c-hidden');
+				} else {
+					//close the sweet alert and clear the upload input
+					$('#fileInput').val('');
+					swal.close();
+					resetAfterMultipleUpload();
+				}
+			});
+		},
+	});
+}
+
+// Function to display rated books
+async function displayRatedBooks(data) {
+	//hide main content
+	document.querySelector('.main-container').classList.add('c-hidden');
+	//show the rated books
+	document.querySelector('.books-found-container').classList.remove('c-hidden');
+	console.log(data);
+	//parse the data
+	data = JSON.parse(data);
+	for (const book of data) {
+		//get books from the data
+		console.log(book);
+		query = book.title + ' ' + book.author;
+		//search for the book
+		fetch('/search?query=' + encodeURIComponent(query))
+			.then((response) => response.json())
+			.then((books) => {
+				console.log(books);
+				document.getElementById('ratedBooks').innerHTML +=
+					createBookCard(books);
+			});
+	}
+}
+
+function resetPage() {
+	//clear file input
+	$('#fileInput').val('');
+	//hide the main content
+	document.querySelector('.main-container').classList.remove('c-hidden');
+	document.querySelector('.books-found-container').classList.add('c-hidden');
+	document
+		.querySelector('.main-content')
+		.classList.remove('single-book-upload');
+	document
+		.querySelector('.main-content')
+		.classList.remove('multiple-book-upload');
+	document.querySelector('.choice-screen').style.display = 'block';
+	document.querySelector('.main-content').style.display = 'none';
+}
+function resetAfterMultipleUpload() {
+	//clear file input
+	$('#fileInput').val('');
+	//hide the main content
+	document.querySelector('.main-container').classList.add('c-hidden');
+	document.querySelector('.books-found-container').classList.remove('c-hidden');
+	document.querySelector('.main-content').classList.add('multiple-book-upload');
+	document.querySelector('.choice-screen').style.display = 'none';
+}

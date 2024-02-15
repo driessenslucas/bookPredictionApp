@@ -6,36 +6,27 @@
 			name="viewport"
 			content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
 		<title>Book predictions</title>
-		<link rel="stylesheet" href="@sweetalert2/theme-dark/dark.css" />
 		<link
 			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 			rel="stylesheet" />
+		<link rel="stylesheet" href="/static/profile/main.css" />
 		<link rel="stylesheet" href="/static/main/main.css" />
 		<link rel="stylesheet" href="/static/main/app.css" />
 		<script src="/static/general.js"></script>
 	</head>
 	<body>
-		<div id="sidebar" class="sidebar">
-			<div class="sidebar-content">
-				<h3>User Profile</h3>
-				<!-- Add navigation links or content here -->
-				<ul class="sidebar-menu">
-					<li><a href="#">Home</a></li>
-					<li>
-						<a href="{{ url_for('user_profile') }}">Profile and reviews</a>
-					</li>
-					<li><a href="#">Settings</a></li>
-					<li><a href="{{ url_for('logout') }}">Logout</a></li>
-				</ul>
-			</div>
+		<div class="choice-screen">
+			<h2>Upload Book Images</h2>
+			<button id="singleBookUploadBtn" class="btn btn-primary">
+				Upload Single Book
+			</button>
+			<button id="multipleBooksUploadBtn" class="btn btn-primary">
+				Upload Multiple Books
+			</button>
 		</div>
-		<button type="button" id="sidebarCollapse" class="btn btn-info">
-			<i class="fas fa-align-left"></i>
-			<span>Toggle Sidebar</span>
-		</button>
 
 		<div class="main-content">
-			<div class="container">
+			<div class="container main-container">
 				<!-- <h2 class="text-center">Book Predict</h2> -->
 				<form id="uploadForm" enctype="multipart/form-data">
 					<div class="form-group">
@@ -70,44 +61,44 @@
 				</div>
 
 				<div id="responseArea" class="response-area mt-3"></div>
-				<div class="bottom-appbar">
-					<div class="tabs">
-						<div
-							class="tab is-active tab--left"
-							onclick="redirect('search-books')">
-							<img src="/static/main/search.svg" alt="Search" />
-							<span>Search</span>
-						</div>
-						<div class="tab tab--fab main-tab" onclick="redirect('main')">
-							<div class="top">
-								<div class="fab">
-									<img src="/static/main/camera.svg" alt="Add" />
-								</div>
-							</div>
-						</div>
-						<div class="tab tab--right" onclick="togglePopup()">
-							<img src="/static/main/profile.svg" alt="Profile" />
-							<span>Profile</span>
-							<div
-								id="profile-popup"
-								class="profile-popup"
-								style="display: none">
-								<ul>
-									<li onclick="redirect('history')">
-										History <img src="/static/main/history.svg" alt="history" />
-									</li>
-									<li onclick="redirect('user-profile')">
-										Likes <img src="/static/main/likes.svg" alt="likes" />
-									</li>
-									<li onclick="redirect('logout')">
-										Logout <img src="/static/main/logout.svg" alt="logout" />
-									</li>
-								</ul>
-							</div>
+			</div>
+			<div class="container books-found-container c-hidden">
+				<h1 class="text-center mb-4">Books found in the image</h1>
+				<div id="ratedBooks" class="row">
+					<!-- Book items will be inserted here by JavaScript -->
+				</div>
+			</div>
+		</div>
+		<div class="bottom-appbar">
+			<div class="tabs">
+				<div class="tab is-active tab--left" onclick="redirect('search-books')">
+					<img src="/static/main/search.svg" alt="Search" />
+					<span>Search</span>
+				</div>
+				<div class="tab tab--fab main-tab" onclick="redirect('main')">
+					<div class="top">
+						<div class="fab">
+							<img src="/static/main/camera.svg" alt="Add" />
 						</div>
 					</div>
 				</div>
-				<script></script>
+				<div class="tab tab--right" onclick="togglePopup()">
+					<img src="/static/main/profile.svg" alt="Profile" />
+					<span>Profile</span>
+					<div id="profile-popup" class="profile-popup" style="display: none">
+						<ul>
+							<li onclick="redirect('history')">
+								History <img src="/static/main/history.svg" alt="history" />
+							</li>
+							<li onclick="redirect('user-profile')">
+								Likes <img src="/static/main/likes.svg" alt="likes" />
+							</li>
+							<li onclick="redirect('logout')">
+								Logout <img src="/static/main/logout.svg" alt="logout" />
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

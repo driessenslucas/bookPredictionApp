@@ -63,10 +63,6 @@ docker-compose up
 
 The application will start running on [http://localhost:8500](http://localhost:8500)
 
-## Deploying
-
-To deploy the application, follow the standard procedures for deploying Flask applications to your preferred hosting service, such as Heroku, Google App Engine, or AWS Elastic Beanstalk.
-
 ## Contributing
 
 Contributions are welcome! For major changes, please open an issue first to discuss what you would like to change.

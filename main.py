@@ -11,22 +11,8 @@ from datetime import timezone
 from pydantic import BaseModel
 from langdetect import detect
 import requests
-
 import firebase_admin
-from firebase_admin import credentials, firestore
-
-# mongo_user = os.environ.get('MONGO_INITDB_ROOT_USERNAME', 'root')
-# mongo_pass = os.environ.get('MONGO_INITDB_ROOT_PASSWORD', 'root123')
-# client = MongoClient('mongodb://mongo:27017/',
-#                      username=mongo_user,
-#                      password=mongo_pass)
-# db = client['book_app']
-# search_history_collection = db['user_requests']
-# users_collection = db['users']
-# user_ratings_collection = db['user_ratings']
-
-import firebase_admin
-from firebase_admin import credentials, storage
+from firebase_admin import credentials, storage,firestore
 
 #get account key from os environment
 
@@ -36,99 +22,6 @@ firebase_admin.initialize_app(cred, {
 })
 
 db = firestore.client()
-
-# def process(image_path):
-#     # get books and ratings from user
-#     user_id = session['user_id']
-
-#     user_ratings = user_ratings_collection.find({'user_id': user_id})
-#     user_ratings_json = dumps(list(user_ratings))
-
-#     # Deserialize JSON string back to Python list of dictionaries
-#     user_ratings_data = json.loads(user_ratings_json)
-
-#     # get the user's search history
-#     user_requests = search_history_collection.find({'user_id': user_id})
-#     user_requests_json = dumps(list(user_requests))
-
-#     # remove the image_base64 from the user_requests
-#     user_requests_data = json.loads(user_requests_json)
-#     for req_element in user_requests_data:
-#         req_element.pop('image_base64', None)
-#         req_element.pop('_id', None)
-#         req_element.pop('user_id', None)
-#         req_element.pop('timestamp', None)
-#     # print('previous user requests:', user_requests_data)
-
-#     # Function to extract book titles and ratings
-#     def get_titles_and_ratings(books):
-#         return [(book["title"], book["rating"]) for book in books]
-
-#     # Test the function with the parsed data
-#     titles_and_ratings = get_titles_and_ratings(user_ratings_data)
-
-#     # get api from env
-#     api_key = os.environ['OPENAI_API_KEY']
-
-#     openai.api_key = api_key
-
-#     base64_image = base64.b64encode(image_path.read()).decode('utf-8')
-
-#     payload = {
-#         "model": "gpt-4-vision-preview",
-#         "messages": [
-#             # Example of a previous user message
-#             {
-#                 "role": "user",
-#                 "content": f"these are my books and their ratings {titles_and_ratings}"},
-#             {
-#                 "role": "user",
-#                 "content": [
-#                     {
-#                         "type": "text",
-#                         "text": f"can you get the titles of the books in this image? Based on the user's previous "
-#                                 f"ratings, give the new book(s) a rating from 1-5. before rating, check if it has been rated before in the user's history. {user_requests_data}"
-#                                 f"Provide reasons the user would like the books in less than 2 sentences, Address the user directly. Return in "
-#                                 f"JSON, with these fields: 'book_title', 'predicted_rating', 'reason'. Give no other "
-#                                 f"text.",
-#                     },
-#                     {
-#                         "type": "image_url",
-#                         "image_url": {
-#                             "url": f"data:image/jpeg;base64,{base64_image}"
-#                         }
-#                     }
-#                 ]
-#             }
-#         ],
-#         "max_tokens": 350,
-#     }
-
-#     # create response from payload
-#     response = openai.ChatCompletion.create(**payload)
-
-#     # mongo
-#     base64_image = f"data:image/jpeg;base64,{base64_image}"
-#     # Assume the rest of your process function is here and generates a `response`
-
-#     openai_response = response.choices[0].message['content']
-
-#     # Remove backticks from the response if present
-#     cleaned_response = openai_response.replace("```", "").strip()
-
-#     cleaned_response = cleaned_response.replace("json", "")
-
-#     # Now, save to MongoDB
-#     request_document = {
-#         "user_id": user_id,
-#         "timestamp": datetime.now(timezone.utc).isoformat(),
-#         "image_base64": base64_image,
-#         "openai_response": cleaned_response,
-#     }
-
-#     search_history_collection.insert_one(request_document)
-
-#     return cleaned_response
 
 def process(image_path):
     user_id = session['user_id']
@@ -261,24 +154,6 @@ def redirect_to_home():
 
 @app.route('/login', methods=['POST'])
 def login():
-    # data = request.get_json()  # Get data as JSON
-    # username = data.get('username')
-    # password = data.get('password')
-
-    # # Assuming users_collection is your MongoDB collection for users
-    # user = users_collection.find_one({'username': username})
-
-    # print(user)
-    # print(username)
-    # print(password)
-
-    # if user and user['password'] == password:  # Reminder: Hash passwords in a real application
-    #     session['user_id'] = str(user['_id'])  # Use the MongoDB ID as the session identifier
-    #     return jsonify({'success': True, 'message': 'Login Successful'})
-    # else:
-    #     return jsonify({'success': False, 'message': 'Invalid username or password'})
-    
-    #set session
     data = request.get_json()  # Get data as JSON
     session['user_id'] = data['uid']
     print(session['user_id'])
@@ -317,19 +192,6 @@ def history():
     return render_template('history.html')
 
 
-# @app.route('/search-history')
-# def search_history():
-#     user_id = session.get('user_id')
-#     user_id_query = int(user_id) if user_id.isdigit() else user_id
-
-#     print('user_id:', user_id)
-
-#     # Query the collection for documents where `user_id` matches the provided value
-#     user_requests = search_history_collection.find({'user_id': user_id_query})
-
-#     # print(dumps(list(user_requests)))
-#     # Render the template with the search history data
-#     return dumps(list(user_requests))
 
 @app.route('/search-history')
 def search_history():
@@ -346,14 +208,6 @@ def search_history():
     return jsonify(user_requests_list)
 
 
-# @app.route('/get-user-ratings', methods=['GET'])
-# def get_user_ratings():
-#     # get current user
-#     user_id = session.get('user_id')
-#     # Query the collection for documents where `user_id` matches the provided value
-#     user_ratings = user_ratings_collection.find({'user_id': user_id})
-
-#     return dumps(list(user_ratings))
 
 @app.route('/get-user-ratings', methods=['GET'])
 def get_user_ratings():
@@ -474,52 +328,6 @@ def remove_book_rating():
             return jsonify({'success': False, 'message': 'Rating not found or already deleted'})
     except Exception as e:
         return jsonify({'success': False, 'message': 'An error occurred', 'details': str(e)}), 500
-
-
-
-# # save rating book
-# @app.route('/rate', methods=["post"])
-# def book_rating():
-#     # get current user
-#     user_id = session.get('user_id')
-#     # get data from post request
-#     data = request.get_json()
-#     # save data to database
-#     # link user_id to rating
-#     data['user_id'] = user_id
-
-#     print(data)
-#     try:
-#         #collection name: user_ratings 
-#         user_ratings_collection.insert_one(data)
-#         # return success message
-#         return jsonify({'success': True, 'message': 'Rating saved successfully'})
-#     except Exception as e:
-#         return jsonify({'success': False, 'message': 'An error occurred', 'details': str(e)}), 500
-
-
-# @app.route('/remove-rating', methods=["POST"])
-# def remove_book_rating():
-#     user_id = session.get('user_id')
-#     data = request.get_json()
-#     isbn = data.get('isbn')
-
-#     print(isbn)
-#     print(user_id)
-#     print(data)
-
-#     user_id_query = int(user_id) if user_id.isdigit() else user_id
-#     try:
-#         result = user_ratings_collection.delete_one({
-#             'user_id': user_id_query,  # Make sure to convert user_id to ObjectId
-#             'isbn': isbn
-#         })
-#         if result.deleted_count > 0:
-#             return jsonify({'success': True, 'message': 'Rating removed successfully'})
-#         else:
-#             return jsonify({'success': False, 'message': 'Rating not found or already deleted'})
-#     except Exception as e:
-#         return jsonify({'success': False, 'message': 'An error occurred', 'details': str(e)}), 500
 
 
 if __name__ == '__main__':

@@ -13,6 +13,16 @@ $(document).ready(function () {
 	// if upload type is none, disable the upload button
 	if (uploadType != 'single' && uploadType != 'multiple') {
 		$('#btnUpload').prop('disabled', true);
+		// also disable the new upload button
+		var mainTab = document.querySelector('.main-tab');
+
+		mainTab.onclick = function () {
+			// do nothing
+		};
+	} else {
+		$('#btnUpload').prop('disabled', false);
+
+		adjustMainTabBehavior();
 	}
 });
 

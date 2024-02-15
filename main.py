@@ -4,15 +4,12 @@ import openai
 import base64
 from datetime import datetime
 import json
-from bson import ObjectId
-from pymongo import MongoClient
-from bson.json_util import dumps
 from datetime import timezone
 from pydantic import BaseModel
 from langdetect import detect
 import requests
 import firebase_admin
-from firebase_admin import credentials, storage,firestore
+from firebase_admin import credentials,firestore
 
 #get account key from os environment
 

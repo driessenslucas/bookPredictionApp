@@ -1,48 +1,3 @@
-// window.onload = function () {
-//     fetch('/search-history')
-//         .then((response) => response.json())
-//         .then((data) => {
-//             const tbody = document.getElementById('searchHistoryBody');
-
-//             data.forEach((record) => {
-//                 // Parse the openai_response from string to object
-//                 let openaiResponse;
-//                 try {
-//                     openaiResponse = JSON.parse(record.openai_response);
-//                 } catch (error) {
-//                     console.log(
-//                         'error while paring file with timestamp:',
-//                         record.timestamp,
-//                         error
-//                     );
-//                 }
-//                 const tr = document.createElement('tr');
-//                 tr.innerHTML = `
-//         <td>${record.timestamp}</td>
-//         <td>${openaiResponse.book_title}</td>
-//         <td>${openaiResponse.predicted_rating}</td>
-//         <td>${openaiResponse.reason}</td>
-//     `;
-//                 tbody.appendChild(tr);
-//             });
-//         })
-//         .catch((error) =>
-//             console.error('Error loading search history:', error)
-//         );
-// };
-// function formatTimestamp(timestamp) {
-// 	const options = {
-// 		year: 'numeric',
-// 		month: 'long',
-// 		day: 'numeric',
-// 		hour: '2-digit',
-// 		minute: '2-digit',
-// 		hour12: true,
-// 	};
-// 	const date = new Date(timestamp);
-// 	return date.toLocaleDateString('en-US', options);
-// }
-
 function formatTimestamp(timestamp) {
 	const options = {
 		year: 'numeric',
@@ -127,9 +82,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			console.error('Error fetching search history:', error);
 		});
 });
-if (
-	window.matchMedia &&
-	window.matchMedia('(prefers-color-scheme: dark)').matches
-) {
-	document.body.setAttribute('data-theme', 'dark');
-}
+// if (
+// 	window.matchMedia &&
+// 	window.matchMedia('(prefers-color-scheme: dark)').matches
+// ) {
+// 	document.body.setAttribute('data-theme', 'dark');
+// }

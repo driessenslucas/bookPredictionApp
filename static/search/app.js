@@ -118,16 +118,3 @@ function rateBook(bookId) {
 			}
 		});
 }
-
-//listent to searchquery input submit on enter
-document.getElementById('searchQuery').addEventListener('keyup', function (e) {
-	if (e.key === 'Enter') {
-		document.getElementById('searchButton').click();
-	}
-});
-if (
-	window.matchMedia &&
-	window.matchMedia('(prefers-color-scheme: dark)').matches
-) {
-	document.body.setAttribute('data-theme', 'dark');
-}

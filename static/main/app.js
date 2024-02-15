@@ -314,12 +314,12 @@ window.onclick = function (event) {
 
 // on document load
 document.addEventListener('DOMContentLoaded', function () {
-	if (
-		window.matchMedia &&
-		window.matchMedia('(prefers-color-scheme: dark)').matches
-	) {
-		document.body.setAttribute('data-theme', 'dark');
-	}
+	// if (
+	// 	window.matchMedia &&
+	// 	window.matchMedia('(prefers-color-scheme: dark)').matches
+	// ) {
+	// 	document.body.setAttribute('data-theme', 'dark');
+	// }
 	//clear upload input
 	$('#fileInput').val('');
 	adjustMainTabBehavior();

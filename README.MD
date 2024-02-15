@@ -1,105 +1,76 @@
-# Book Recommendation Web Application
+# Bookify Flask Application
 
-## Author
-
-**Lucas Driessens**  
-Institution: Howest University of Applied Sciences  
-Date: 2024-10-02
+Bookify is a Flask-based web application designed to manage book information, including user ratings, search history, and book recommendations using OpenAI's GPT-4 API. Users can upload images of books to receive predictions on book titles, authors, and potential ratings based on their past preferences.
 
 ## Features
 
-- Image upload via a simple web form.
-- Processing images to extract book titles using OpenAI's GPT-4 Vision model.
-- Predictive rating based on historical data with reasoning.
-
-### Upcoming Features
-
-- [ ] Profiles for users to store their ratings and preferences.
-- [ ] A history of previous ratings and recommendations.
-- [ ] A custom Recommendation System based on user ratings and preferences.
-
-## Project Overview
-This project aims to develop a dynamic web application that provides personalized book recommendations to users. Leveraging Flask, MongoDB, and OpenAI's powerful AI models, the application offers an innovative approach to discover books based on user preferences and ratings. Users can upload images of books, and the application, through AI analysis, recommends new books with predicted ratings and reasons why the user might enjoy them. This project not only showcases the integration of web development and AI technologies but also enhances the user experience by making book discovery personalized and interactive.
-
-## Key Features
-- **User Profile Management:** Utilizes MongoDB for storing user information, including book ratings and preferences, to provide a tailored experience.
-- **Image Processing for Book Recommendations:** Users can upload book images, which are then processed using OpenAI's API to identify titles and suggest similar books with predicted ratings.
-- **Dynamic Web Interface:** Built with Flask, the application offers a seamless and interactive user interface for uploading images, viewing recommendations, and managing profiles.
-- **Personalized Book Ratings:** Incorporates user ratings from past interactions to refine future recommendations, ensuring suggestions become more accurate over time.
-- **Secure User Authentication:** Implements session-based user authentication to protect access and ensure data privacy.
-
-## Technologies Used
-- **Flask:** For creating the web application's backend and API endpoints.
-- **MongoDB:** To manage user data, book ratings, and recommendations, enabling real-time data access and storage.
-- **OpenAI API:** Leverages AI to analyze book images and generate recommendations based on textual and visual data.
-- **JavaScript and HTML/CSS:** For developing the frontend, ensuring a dynamic and responsive user interface.
-- **Docker** For deployment 
-
-## Challenges and Solutions
-- **Integrating AI for Image Processing:** The challenge of accurately extracting book titles from images was addressed by utilizing OpenAI's advanced model, which interprets image content and matches it with user preferences.
-- **User Data Management:** MongoDB was chosen for its flexibility in handling diverse data types and its scalability, allowing for efficient user data management and real-time updates.
-- **User Experience Design:** Focused on creating an intuitive and engaging interface that simplifies the process of finding and rating books, enhancing user interaction and satisfaction.
-
-## Future Enhancements
-- **Enhanced Recommendation Algorithms:** To further improve recommendation accuracy by incorporating more nuanced user feedback and AI analysis.
-- **Social Features:** Introducing social elements where users can share and discuss their book recommendations with friends or public communities.
-- **Multi-Language Support:** Expanding the application's reach by adding support for multiple languages, making it accessible to a wider audience.
-
-## Conclusion
-This book recommendation web application stands at the intersection of web development and AI, offering a unique solution to personalized book discovery. It exemplifies how technology can transform traditional media consumption, making it more interactive, personalized, and enjoyable. As the project evolves, it aims to become an essential tool for book lovers and readers seeking to explore new titles aligned with their tastes and preferences.
+- User authentication and session management
+- Upload book images for title and author recognition
+- Rate books and manage ratings
+- View user-specific search history and ratings
+- Fetch book information using Google Books API
+- Utilize OpenAI's GPT-4 API for book recommendations and information extraction
 
 ## Prerequisites
 
-- Docker and Docker Compose installed on your system.
-- An OpenAI API key.
+Before you begin, ensure you have met the following requirements:
 
-## Setup and Running with Docker
+- Python 3.6+
+- Flask
+- Firebase account and Firestore database
+- OpenAI API key
 
-1. **Clone the Repository**
+## Setting Up
 
-   First, clone this repository to your local machine using:
+1. **Clone the repository**
 
-   ```
-   git https://github.com/driessenslucas/bookPredictionApp
-   cd bookPredictionApp
-   ```
+```bash
+git clone https://yourrepositorylink.git
+cd your-project-folder
+```
 
-2. **Configure API Key**
+2. **Install dependencies**
 
-   Before running the application, you need to set your OpenAI API key. Create a `.env` file in the project root directory and add your OpenAI API key as follows:
+```bash
+pip install -r requirements.txt
+```
 
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   ```
+3. **Configure Firebase**
 
-   Replace `your_openai_api_key_here` with your actual OpenAI API key.
+   - Obtain your Firebase project credentials and replace the Firebase configuration file at `./static/bookify-f6b4b-firebase-adminsdk-wckno-636276de51.json`.
 
-3. **Build and Run with Docker Compose**
+4. **Set environment variables**
 
-   Use Docker Compose to build and run the application:
+Set the following environment variables:
 
-   ```
-   docker-compose up --build
-   ```
+- `OPENAI_API_KEY`: Your OpenAI API key.
+- `SECRET_KEY`: A secret key for Flask application.
+- Firebase related environment variables if any.
 
-   This command builds the Docker image and starts the container. The application will be accessible at `http://localhost:8500`.
+You can set them using a `.env` file or export them directly into your environment.
 
-## Usage
+5. **Initialize Firebase Admin SDK**
 
-- Navigate to `http://localhost:8500` in your web browser to access the application.
-- Use the provided form to upload an image containing book titles.
-- Submit the form, and the application will process the image, predict titles, rate them, and provide reasoning based on previous user ratings.
+Ensure that Firebase Admin SDK is correctly initialized with your project's credentials as shown in the application.
 
-## Development
+## Running the Application
 
-For local development, you can mount the application directory inside the Docker container to reflect changes in real-time without rebuilding the image. This setup is already configured in the `docker-compose.yml` file.
+To run the application locally, execute the following command:
+
+```bash
+docker-compose up
+```
+
+The application will start running on [http://localhost:8500](http://localhost:8500)
+
+## Deploying
+
+To deploy the application, follow the standard procedures for deploying Flask applications to your preferred hosting service, such as Heroku, Google App Engine, or AWS Elastic Beanstalk.
 
 ## Contributing
 
-Feel free to fork the repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
-
-Ensure to update tests as appropriate.
+Contributions are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+Distributed under the MIT License. See `LICENSE` for more information.

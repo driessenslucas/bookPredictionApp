@@ -168,7 +168,7 @@
 
 img[src$='.svg'] {
 	color: var(--text-color);
-	filter: invert(0.1) sepia(1) saturate(5) hue-rotate(175deg) brightness(3);
+	/* filter: invert(0.1) sepia(1) saturate(5) hue-rotate(175deg) brightness(3); */
 }
 
 .swal2-modal {

@@ -1,13 +1,13 @@
-document.onload = function () {
-	if (
-		window.matchMedia &&
-		window.matchMedia('(prefers-color-scheme: dark)').matches
-	) {
-		document.body.setAttribute('data-theme', 'dark');
-	}
-	// Hide success screen
-	console.log('onload');
-};
+// document.onload = function () {
+// 	if (
+// 		window.matchMedia &&
+// 		window.matchMedia('(prefers-color-scheme: dark)').matches
+// 	) {
+// 		document.body.setAttribute('data-theme', 'dark');
+// 	}
+// 	// Hide success screen
+// 	console.log('onload');
+// };
 var firebaseConfig = {
 	apiKey: 'AIzaSyCEXMwUMnAYuTlVDcU6DRIm2Vu60NomqJE',
 	authDomain: 'bookify-f6b4b.firebaseapp.com',

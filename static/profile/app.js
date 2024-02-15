@@ -79,11 +79,11 @@ async function displayRatedBooks() {
 	}
 }
 
-// Call the function on page load
+// // Call the function on page load
 displayRatedBooks();
-if (
-	window.matchMedia &&
-	window.matchMedia('(prefers-color-scheme: dark)').matches
-) {
-	document.body.setAttribute('data-theme', 'dark');
-}
+// if (
+// 	window.matchMedia &&
+// 	window.matchMedia('(prefers-color-scheme: dark)').matches
+// ) {
+// 	document.body.setAttribute('data-theme', 'dark');
+// }

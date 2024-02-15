@@ -31,7 +31,7 @@
 				<div class="c-login">
 					<form action="" onsubmit="return false" class="login-form">
 						<div class="intro" id="intro">
-							<h2>Hallo, welcome back!</h2>
+							<h2>Hallo, Reader!</h2>
 							<p>Login to continue.</p>
 						</div>
 						<div class="entry-item">
@@ -42,13 +42,16 @@
 								placeholder="username"
 								required />
 						</div>
-						<div class="entry-item">
+						<div class="entry-item" style="position: relative">
 							<input
 								type="password"
 								name="password"
 								id="password"
 								placeholder="password"
 								required />
+							<span class="toggle-password" onclick="togglePasswordVisibility()"
+								>👁</span
+							>
 						</div>
 						<div class="buttons">
 							<button type="submit" id="continue">Login</button>

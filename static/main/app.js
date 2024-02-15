@@ -3,6 +3,20 @@ $('#imagePreview').click(function () {
 });
 
 $(document).ready(function () {
+	// get upload type from main-content classlist
+	var uploadType = document
+		.querySelector('.main-content')
+		.classList.contains('single-book-upload')
+		? 'single'
+		: 'multiple';
+
+	// if upload type is none, disable the upload button
+	if (uploadType != 'single' && uploadType != 'multiple') {
+		$('#btnUpload').prop('disabled', true);
+	}
+});
+
+$(document).ready(function () {
 	$('#btnUpload').prop('disabled', true); // Disable upload button if no file is selected
 	$('#fileInput').change(function (e) {
 		// Check if any file is selected
@@ -272,9 +286,13 @@ function redirect(page) {
 	}
 }
 
+// function togglePopup() {
+// 	var popup = document.getElementById('profile-popup');
+// 	popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+// }
 function togglePopup() {
-	var popup = document.getElementById('profile-popup');
-	popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+	var popup = document.querySelector('.profile-popup');
+	popup.classList.toggle('active'); // This toggles the 'active' class on and off
 }
 
 window.onclick = function (event) {

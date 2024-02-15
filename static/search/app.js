@@ -36,7 +36,7 @@ document.getElementById('searchButton').addEventListener('click', function () {
             </div>
             <div class="rating-section">
                 <div>
-                    <input type="number" min="1" max="5" placeholder="Rate 1-5" id="rating-${
+                    <input inputmode="numeric" type="number" min="1" max="5" placeholder="Rate 1-5" id="rating-${
 											book.isbn
 										}">
                     <button onclick="rateBook('${

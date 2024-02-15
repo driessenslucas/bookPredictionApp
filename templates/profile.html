@@ -37,7 +37,7 @@
 				<div class="tab tab--right" onclick="togglePopup()">
 					<img src="/static/main/profile.svg" alt="Profile" />
 					<span>Profile</span>
-					<div id="profile-popup" class="profile-popup" style="display: none">
+					<div id="profile-popup" class="profile-popup">
 						<ul>
 							<li onclick="redirect('history')">
 								History <img src="/static/main/history.svg" alt="history" />
@@ -77,13 +77,17 @@
 						: window.location.replace(`/${page}`);
 				}
 			}
+			// function togglePopup() {
+			// 	var popup = document.getElementById('profile-popup');
+			// 	if (popup.style.display === 'none') {
+			// 		popup.style.display = 'block';
+			// 	} else {
+			// 		popup.style.display = 'none';
+			// 	}
+			// }
 			function togglePopup() {
-				var popup = document.getElementById('profile-popup');
-				if (popup.style.display === 'none') {
-					popup.style.display = 'block';
-				} else {
-					popup.style.display = 'none';
-				}
+				var popup = document.querySelector('.profile-popup');
+				popup.classList.toggle('active'); // This toggles the 'active' class on and off
 			}
 
 			// Optional: Close the popup when clicking outside of it

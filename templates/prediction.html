@@ -12,7 +12,6 @@
 		<link rel="stylesheet" href="/static/profile/main.css" />
 		<link rel="stylesheet" href="/static/main/main.css" />
 		<link rel="stylesheet" href="/static/main/app.css" />
-		<script src="/static/general.js"></script>
 	</head>
 	<body>
 		<div class="choice-screen">
@@ -72,8 +71,10 @@
 		<div class="bottom-appbar">
 			<div class="tabs">
 				<div class="tab is-active tab--left" onclick="redirect('search-books')">
-					<img src="/static/main/search.svg" alt="Search" />
-					<span>Search</span>
+					<div class="tabfab">
+						<img src="/static/main/search.svg" alt="Search" />
+						<span>Search</span>
+					</div>
 				</div>
 				<div class="tab tab--fab main-tab" onclick="redirect('main')">
 					<div class="top">
@@ -85,7 +86,7 @@
 				<div class="tab tab--right" onclick="togglePopup()">
 					<img src="/static/main/profile.svg" alt="Profile" />
 					<span>Profile</span>
-					<div id="profile-popup" class="profile-popup" style="display: none">
+					<div id="profile-popup" class="profile-popup">
 						<ul>
 							<li onclick="redirect('history')">
 								History <img src="/static/main/history.svg" alt="history" />
@@ -104,5 +105,6 @@
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="/static/main/app.js"></script>
+		<script src="/static/general.js"></script>
 	</body>
 </html>

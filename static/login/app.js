@@ -103,3 +103,10 @@ function googleSignIn() {
 			// Show error message
 		});
 }
+function togglePasswordVisibility() {
+	var passwordInput = document.getElementById('password');
+	var type =
+		passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+	passwordInput.setAttribute('type', type);
+	// This can be further enhanced to change the icon or text of the toggle button
+}

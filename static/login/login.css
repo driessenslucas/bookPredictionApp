@@ -43,7 +43,7 @@ body {
 .c-login {
 	display: flex;
 	justify-content: center;
-	width: 400px;
+	width: 310px;
 	border-radius: 12px;
 }
 .c-filler {
@@ -248,4 +248,11 @@ a {
 	.c-filler-mobile {
 		display: none;
 	}
+}
+/* Add additional CSS for the toggle button if needed */
+.toggle-password {
+	cursor: pointer;
+	position: absolute;
+	right: 10px;
+	top: 10px;
 }

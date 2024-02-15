@@ -335,3 +335,78 @@ select:focus {
 #ratedBooks {
 	padding-bottom: 100px;
 }
+
+body {
+	background-color: var(--background-color);
+	color: var(--text-color);
+	font-family: 'Arial', sans-serif;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	margin: 0;
+	padding: 20px;
+	min-height: 100vh;
+	width: auto;
+}
+
+.choice-screen {
+	text-align: center;
+	width: 100%;
+	max-width: 600px; /* Adjust based on your preference */
+	margin: auto;
+	padding: 20px;
+	box-shadow: 0 2px 4px var(--shadow-color);
+	border-radius: 10px;
+	background-color: var(--container-background-color);
+}
+
+.choice-screen h2 {
+	margin-bottom: 20px;
+	color: var(--text-color);
+}
+
+.btn {
+	display: inline-block;
+	padding: 10px 20px;
+	margin: 10px;
+	border: none;
+	border-radius: 5px;
+	background-color: var(--button-background-color);
+	color: var(--text-color);
+	text-decoration: none;
+	font-size: 16px;
+	transition: background-color 0.3s ease, transform 0.1s ease;
+	cursor: pointer;
+	box-shadow: 0 2px 3px var(--shadow-color);
+}
+
+.btn:hover,
+.btn:focus {
+	background-color: var(--button-hover-background-color);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.btn-primary {
+	background-color: var(--button-background-color);
+}
+
+@media screen and (max-width: 768px) {
+	.choice-screen {
+		padding: 10px;
+		border-radius: 5px;
+	}
+
+	.btn {
+		width: 100%; /* Full-width buttons on smaller screens */
+		margin: 10px 0; /* Adjust margin for vertical stacking */
+	}
+}
+
+/* Additional accessibility improvements */
+.btn:focus-visible {
+	outline: 2px solid var(--button-hover-background-color);
+	outline-offset: 2px;
+}

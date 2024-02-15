@@ -168,7 +168,7 @@
 
 img[src$='.svg'] {
 	color: var(--text-color);
-	filter: invert(0.1) sepia(1) saturate(5) hue-rotate(175deg);
+	filter: invert(0.1) sepia(1) saturate(5) hue-rotate(175deg) brightness(3);
 }
 
 .swal2-modal {
@@ -184,4 +184,68 @@ img[src$='.svg'] {
 }
 .custom-swal {
 	margin-bottom: 60px;
+}
+
+.tab:hover .fab {
+	background-color: var(--container-background-color) !important;
+}
+.tab:hover .tabfab {
+	background-color: var(--button-hover-background-color) !important;
+}
+
+.tabfab {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+	border-radius: 4px;
+}
+/* Smooth appearance */
+.profile-popup {
+	display: none !important; /* Start hidden */
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out;
+}
+
+/* Use a CSS class to control the visibility and animation */
+.profile-popup.active {
+	display: block !important; /* Shown */
+	opacity: 1; /* Fade in */
+}
+
+/* Improved hover effect */
+.profile-popup ul li {
+	transition: background-color 0.2s ease-in-out, color 0.2s ease;
+}
+
+.profile-popup ul li:hover {
+	background-color: #f0f0f0; /* Lighter shade for hover */
+	color: var(
+		--button-hover-background-color
+	); /* Optional: Change text color on hover */
+}
+.profile-popup ul li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between; /* Adjust if you want text and image to be spaced out */
+	padding: 12px 20px;
+	margin: 2px 0;
+	transition: background-color 0.2s ease-in-out;
+	cursor: pointer;
+}
+.profile-popup ul li:hover {
+	background-color: var(
+		--button-hover-background-color
+	); /* Change as per your theme */
+	color: #fff; /* Ensure text color contrasts well with the hover background */
+}
+.profile-popup ul li img {
+	width: 36px; /* Adjust based on your preference */
+	height: auto;
+	margin-left: 12px; /* Adds some space between the text and the image */
+}
+.profile-popup ul li {
+	font-size: 16px; /* Adjust based on your preference */
+	line-height: 1.5; /* Ensures adequate spacing between lines of text */
+	color: var(--text-color); /* Adjust as needed */
 }

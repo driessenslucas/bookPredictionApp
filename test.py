@@ -15,7 +15,8 @@ payload = {
             "content": [
                 {
                     "type": "text",
-                    "text": "give all the titles of the books in the image, return in json format only, no other text. return these fields: title, author (and isbn if available.)"
+                    "text": "give all the titles of the books in the image, return in json format only, no other "
+                            "text. return these fields: title, author (and isbn if available.)"
                 },
                 {
                     "type": "image_url",

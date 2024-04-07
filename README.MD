@@ -70,3 +70,30 @@ Contributions are welcome! For major changes, please open an issue first to disc
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
+
+## alternativly using LLaVA 
+# futher implementation using LLaVA
+
+Results:
+based on this book in the picture and my previous ratings: predict how I will rate this book
+"The Secret History Donna tart, rating 5"
+"normal people Sally Rooney, rating 2"
+Provide reasons the user would like the books in less than 2 sentences. Retrun in JSON, with these fields: 'book_title', 'predicted_rating', 'reason'.
+
+{
+  "book_title": "Beautiful World, Where Are You",
+  "predicted_rating": 3,
+  "reason": "The book is a novel by Sally Rooney, who is known for her exploration of relationships and the human condition. If the user enjoys character-driven stories and introspective narratives, they might find this book engaging. However, if they prefer more plot-driven or action-packed stories, they might not rate it as highly."
+}
+
+```bash
+python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:8400 --port 8440 --worker http://localhost:8440 --model-path liuhaotian/llava-v1.5-13b --device cpu
+```
+```bash
+ python -m llava.serve.controller --host 0.0.0.0 --port 8400
+```
+```bash
+python -m llava.serve.gradio_web_server --controller http://localhost:8400 --model-list-mode reload
+```
+

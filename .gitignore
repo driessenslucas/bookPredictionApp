@@ -2,4 +2,4 @@
 __pycache__
 .idea
 /secret_files/*
-bookify-f6b4b-firebase-adminsdk-wckno-636276de51.json
+*.json
